@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-Hans" data-lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title data-zh="隐私政策 · Uptitle" data-en="Privacy Policy · Uptitle">隐私政策 · Uptitle</title>
+<link rel="stylesheet" href="legal.css">
+<script src="legal.js"></script>
+</head>
+<body>
+
+<nav class="nav" aria-label="Uptitle">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="img/icon.png" alt="" width="24" height="24">Uptitle</a>
+    <div class="switch" role="group" aria-label="语言 Language">
+      <button type="button" data-set-lang="zh" aria-pressed="true">中文</button>
+      <button type="button" data-set-lang="en" aria-pressed="false">English</button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap page">
+  <nav class="docs" aria-label="条款与隐私 Policies">
+    <a href="privacy.html" aria-current="page"><span class="zh">隐私政策</span><span class="en" lang="en">Privacy Policy</span></a>
+    <a href="terms.html"><span class="zh">用户协议</span><span class="en" lang="en">Terms of Use</span></a>
+    <a href="refund.html"><span class="zh">退款说明</span><span class="en" lang="en">Refund Policy</span></a>
+  </nav>
+
+  <article class="zh" lang="zh-Hans">
+    <h1>隐私政策</h1>
+    <p class="date">生效日期：2026 年 10 月 28 日</p>
+    <p class="intro">Uptitle 在你的 Mac 上把声音转成字幕、翻译和笔记。声音和文字在本机处理和保存：我们没有接收录音或逐字稿的服务器，没有账号，App 里也没有统计和广告代码。本政策说明哪些数据留在本机，哪些在什么时候发给谁。</p>
+
+    <h2>1. 我们是谁</h2>
+    <p>Uptitle 由 Dario Chen 个人开发和提供（下称「我们」）。隐私问题请发邮件到 <a href="mailto:ydbdyds@gmail.com">ydbdyds@gmail.com</a>。</p>
+
+    <h2>2. 只留在你 Mac 上的数据</h2>
+    <ul>
+      <li><b>声音：</b>麦克风、电脑声音或你指定的 App 的声音，在本机识别成字幕，用的是 macOS 自带的语音识别和在本机运行的模型。</li>
+      <li><b>录音和记录：</b>打开「保存录音」（默认打开）时，录音、逐字稿、译文、笔记、问答和说话人名字保存在 <code>~/Library/Application Support</code> 里 App 自己的文件夹。导入的音频和视频在本机读取。</li>
+      <li><b>词本：</b>保存在同一个文件夹里。</li>
+      <li><b>诊断日志：</b>App 在 <code>~/Library/Logs</code> 里写诊断日志，记录运行情况，可能包含字幕句子（AI 纠错前后）和出错信息。日志不会自动发出；只有你自己把它发给我们排查问题时，我们才会看到。</li>
+      <li><b>听写：</b>识别出的文字先放进剪贴板，粘贴到光标处，然后恢复你原来的剪贴板内容。</li>
+      <li><b>会员信息：</b>许可证、激活编号、最近一次核验结果，以及试用开始日期和这台 Mac 的设备编号，保存在 macOS 钥匙串里。</li>
+    </ul>
+    <p>你可以在历史记录里删除任意一条记录。删掉 App 的这个文件夹和诊断日志，再删掉钥匙串里 App 的条目，就清除了全部这些数据。</p>
+
+    <h2>3. 苹果的系统功能</h2>
+    <p>Uptitle 用到的苹果语音识别、苹果翻译和 Apple 智能都在你的 Mac 上运行，适用苹果的隐私政策。</p>
+
+    <h2>4. 会离开你 Mac 的数据</h2>
+    <p>只有下面这些情况：</p>
+    <ul>
+      <li><b>购买：</b>付款在 Lemon Squeezy 的结账页完成。Lemon Squeezy 是这笔交易的经销商（merchant of record），由它收集你的姓名、邮箱、付款信息和计税用的账单地址，适用它的隐私政策。我们从 Lemon Squeezy 收到订单信息（姓名、邮箱、国家或地区、所购商品和许可证），用来发放许可证和提供售后。</li>
+      <li><b>激活和核验许可证：</b>激活时、许可证有效期间每周一次，以及停用时，App 把许可证和设备编号发给 Lemon Squeezy 的许可证服务器。设备编号是由这台 Mac 的硬件编号单向算出的 8 个字符，无法反推出硬件编号。这些请求不含任何声音和文字。试用不联网，不发送任何数据。</li>
+      <li><b>Claude（只在你选用时）：</b>你在设置里选用 Claude 并填入自己的 API Key 后，要纠错、翻译、写笔记、回答问题或整理进词本的文字会发给 Anthropic：纠错和翻译时是当前一句、前面几句和你的专有名词；笔记、问答和词本是整场的逐字稿。声音不会发出。这些请求走你自己的 Anthropic 账户，适用 Anthropic 的条款和隐私政策。API Key 保存在钥匙串里，只发给 Anthropic。</li>
+      <li><b>下载模型：</b>本地模型从 Hugging Face 下载；语音识别模型和翻译语言包由 macOS 从苹果下载。这些服务器能看到你的 IP 地址，收不到你的内容。</li>
+      <li><b>检查更新：</b>App 定期从 GitHub 读取更新清单，有新版本时从 GitHub 下载。GitHub 能看到你的 IP 地址和 App 的版本号。</li>
+    </ul>
+
+    <h2>5. 我们不做的事</h2>
+    <ul>
+      <li>不建账号，不收集使用统计，不放广告，不跟踪你在其他 App 和网站上的行为。</li>
+      <li>不出售、不出租你的个人信息，也不用它投放定向广告。</li>
+      <li>不用你的录音或文字训练任何模型。</li>
+    </ul>
+
+    <h2>6. 官网</h2>
+    <p>官网托管在 GitHub Pages 上，GitHub 会记录访问日志（包括 IP 地址），适用 GitHub 的隐私声明。官网没有统计和广告代码，也不从其他服务加载字体或脚本。</p>
+
+    <h2>7. 保存多久</h2>
+    <ul>
+      <li><b>你 Mac 上的数据：</b>保存到你删除为止。</li>
+      <li><b>订单和许可证信息：</b>在提供售后所需的期间内，并按税务和会计法规要求的期限保存。Lemon Squeezy 按它自己的政策保存它的记录。</li>
+    </ul>
+
+    <h2>8. 你的权利</h2>
+    <p>你可以要求查看、更正或删除我们持有的你的个人信息（订单和许可证信息），也可以反对我们的某种使用方式。请发邮件到 <a href="mailto:ydbdyds@gmail.com">ydbdyds@gmail.com</a>，我们会在 30 天内答复；为确认是你本人，可能请你用购买邮箱来信。法律要求保留的记录（例如税务记录）在保留期满后删除。如果你在欧盟、英国或其他有数据保护法的地区，也可以向当地的监管机构投诉。加州居民：我们不出售、也不共享你的个人信息。</p>
+
+    <h2>9. 处理依据（欧盟和英国用户）</h2>
+    <ul>
+      <li>发放和核验许可证、提供售后：履行我们与你之间的合同。</li>
+      <li>防止许可证被滥用：我们的正当利益。</li>
+      <li>把文字发给 Anthropic：由你选择，并在你自己的 Anthropic 账户下进行。</li>
+    </ul>
+
+    <h2>10. 跨境传输</h2>
+    <p>Lemon Squeezy、Anthropic、Hugging Face 和 GitHub 可能在美国和其他国家处理数据，保护措施见它们各自的政策。</p>
+
+    <h2>11. 儿童</h2>
+    <p>Uptitle 不面向 13 岁以下（欧盟为 16 岁以下）的儿童，我们不会有意收集他们的个人信息。</p>
+
+    <h2>12. 政策变更</h2>
+    <p>本政策有实质变化时，我们会在官网和 App 的更新说明里告知，并更新生效日期。</p>
+  </article>
+
+  <article class="en" lang="en">
+    <h1>Privacy Policy</h1>
+    <p class="date">Effective date: October 28, 2026</p>
+    <p class="intro">Uptitle turns speech into captions, translations and notes on your Mac. Audio and text are processed and stored on your Mac: we run no server that receives your recordings or transcripts, there are no accounts, and the app contains no analytics or advertising code. This policy explains what stays on your Mac, and what leaves it, when, and to whom.</p>
+
+    <h2>1. Who we are</h2>
+    <p>Uptitle is developed and provided by Dario Chen, an individual developer (“we”, “us”). For privacy questions, email <a href="mailto:ydbdyds@gmail.com">ydbdyds@gmail.com</a>.</p>
+
+    <h2>2. Data that stays on your Mac</h2>
+    <ul>
+      <li><b>Audio:</b> sound from your microphone, your Mac, or an app you choose is turned into captions on your Mac, using the speech recognition built into macOS and models that run locally.</li>
+      <li><b>Recordings and sessions:</b> when “Save recordings” is on (the default), recordings, transcripts, translations, notes, questions and answers, and speaker names are saved in the app’s own folder in <code>~/Library/Application Support</code>. Imported audio and video files are read on your Mac.</li>
+      <li><b>Vocabulary book:</b> saved in the same folder.</li>
+      <li><b>Diagnostic log:</b> the app writes a diagnostic log in <code>~/Library/Logs</code> that records how it runs and may include caption sentences (before and after AI correction) and error details. It is never sent automatically; we see it only if you send it to us yourself.</li>
+      <li><b>Dictation:</b> recognized text is placed on the clipboard and pasted at your cursor, and then your previous clipboard contents are restored.</li>
+      <li><b>Membership:</b> your license key, activation ID, latest check result, trial start date and this Mac’s device ID are kept in the macOS keychain.</li>
+    </ul>
+    <p>You can delete any session in History. Deleting the app’s folder and its diagnostic log, and the app’s items in the keychain, removes all of this data.</p>
+
+    <h2>3. Apple’s built-in features</h2>
+    <p>The Apple speech recognition, Apple Translation and Apple Intelligence features that Uptitle uses run on your Mac and are governed by Apple’s privacy policy.</p>
+
+    <h2>4. Data that leaves your Mac</h2>
+    <p>Only in these cases:</p>
+    <ul>
+      <li><b>Purchases:</b> payment takes place on Lemon Squeezy’s checkout. Lemon Squeezy is the merchant of record for the sale; it collects your name, email address, payment details and billing address for tax purposes under its own privacy policy. We receive order information from Lemon Squeezy (name, email address, country or region, product and license) to issue your license and provide support.</li>
+      <li><b>License activation and checks:</b> when you activate a license, once a week while it is active, and when you deactivate it, the app sends your license key and a device ID to Lemon Squeezy’s license server. The device ID is 8 characters derived one-way from your Mac’s hardware ID and cannot be turned back into it. These requests contain no audio or text. The trial works offline and sends nothing.</li>
+      <li><b>Claude, only if you choose it:</b> if you select Claude in Settings and enter your own API key, the text to be corrected, translated, summarized, asked about or added to the vocabulary book is sent to Anthropic: for correction and translation, the current sentence, a few sentences before it and your glossary; for notes, questions and the vocabulary book, the whole transcript. Audio is never sent. These requests run under your own Anthropic account and are governed by Anthropic’s terms and privacy policy. Your API key is kept in the keychain and sent only to Anthropic.</li>
+      <li><b>Model downloads:</b> local models are downloaded from Hugging Face; speech recognition models and translation language packs are downloaded by macOS from Apple. These servers see your IP address and receive none of your content.</li>
+      <li><b>Update checks:</b> the app regularly reads an update list from GitHub and downloads new versions from GitHub. GitHub sees your IP address and the app’s version.</li>
+    </ul>
+
+    <h2>5. What we don’t do</h2>
+    <ul>
+      <li>No accounts, usage analytics or advertising, and no tracking across other apps and websites.</li>
+      <li>We do not sell or rent your personal information or use it for targeted advertising.</li>
+      <li>We do not use your recordings or text to train any model.</li>
+    </ul>
+
+    <h2>6. Website</h2>
+    <p>The website is hosted on GitHub Pages. GitHub keeps access logs, including IP addresses, under the GitHub Privacy Statement. The website has no analytics or advertising code and loads no fonts or scripts from other services.</p>
+
+    <h2>7. How long we keep data</h2>
+    <ul>
+      <li><b>Data on your Mac:</b> until you delete it.</li>
+      <li><b>Order and license information:</b> for as long as we need it for support, and for the periods tax and accounting laws require. Lemon Squeezy keeps its records under its own policy.</li>
+    </ul>
+
+    <h2>8. Your rights</h2>
+    <p>You can ask to access, correct or delete the personal information we hold about you (order and license information), or object to how we use it. Email <a href="mailto:ydbdyds@gmail.com">ydbdyds@gmail.com</a> and we will reply within 30 days; to confirm it’s you, we may ask you to write from your purchase email address. Records the law requires us to keep, such as tax records, are deleted when that period ends. If you are in the EU, the UK or another region with data protection law, you can also complain to your local supervisory authority. California residents: we do not sell or share your personal information.</p>
+
+    <h2>9. Legal bases (EU and UK users)</h2>
+    <ul>
+      <li>Issuing and checking licenses and providing support: performing our contract with you.</li>
+      <li>Preventing license misuse: our legitimate interest.</li>
+      <li>Sending text to Anthropic: done at your choice, under your own Anthropic account.</li>
+    </ul>
+
+    <h2>10. International transfers</h2>
+    <p>Lemon Squeezy, Anthropic, Hugging Face and GitHub may process data in the United States and other countries, with the safeguards described in their own policies.</p>
+
+    <h2>11. Children</h2>
+    <p>Uptitle is not directed to children under 13 (under 16 in the EU), and we do not knowingly collect their personal information.</p>
+
+    <h2>12. Changes</h2>
+    <p>If this policy changes materially, we will announce it on the website and in the app’s release notes, and update the effective date.</p>
+  </article>
+</main>
+
+<footer class="footer">
+  <div class="wrap fine-row">
+    <span>© 2026 Dario Chen</span>
+    <nav class="legal" aria-label="条款与隐私 Policies">
+      <a href="privacy.html"><span class="zh">隐私政策</span><span class="en" lang="en">Privacy Policy</span></a>
+      <a href="terms.html"><span class="zh">用户协议</span><span class="en" lang="en">Terms of Use</span></a>
+      <a href="refund.html"><span class="zh">退款说明</span><span class="en" lang="en">Refund Policy</span></a>
+      <a href="mailto:ydbdyds@gmail.com">ydbdyds@gmail.com</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>

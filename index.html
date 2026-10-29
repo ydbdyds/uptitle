@@ -1,0 +1,1669 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Uptitle</title>
+<meta name="description" content="Uptitle：刘海下的实时字幕与翻译。AI 纠错、Nemotron 实时识别、会后重新识别、带出处的会议问答、英文会议词本、笔记和说话人，语音识别和 AI 都在你的 Mac 上运行；实时字幕和翻译免费。">
+<style>
+/* Layout: one continuous dark story. The opening and five features share a MacBook that stays on screen while the
+   text scrolls past; its notch and app window change with each chapter. Then one grid of smaller features, a
+   privacy section, the free version beside membership, and a short FAQ. The page glow takes its color from the
+   chapter being read. */
+@property --hue { syntax: "<number>"; inherits: true; initial-value: 232; }
+:root {
+  --bg: #000;
+  --raise: rgba(255, 255, 255, 0.045);
+  --raise-2: rgba(255, 255, 255, 0.08);
+  --edge: rgba(255, 255, 255, 0.1);
+  --text: #f5f5f7;
+  --text-2: #a1a1a6;
+  --text-3: #6e6e73;
+  --good: #30d158;
+  --bad: #ff453a;
+  --link: #2997ff;
+  --cta: #0071e3;
+  --spark: #bf5af2;
+  --v-d: #64d2ff;
+  --v-s: #ff9f0a;
+  --v-r: #bf5af2;
+  --window: #1c1c1e;
+  --gloss: #ffd16b;
+  --meaning: #ff9f0a;
+  --grad-ai: linear-gradient(90deg, #0894ff 0%, #c959dd 38%, #ff2e54 70%, #ff9004 100%);
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  --ease: cubic-bezier(0.2, 0.7, 0.15, 1);
+  --hue: 232;
+  color-scheme: dark;
+  transition: --hue 1.4s var(--ease);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-padding-top: 52px; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+p { margin: 0; }
+a { color: inherit; }
+img { max-width: 100%; height: auto; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 6px; }
+.wrap {
+  width: 100%; max-width: 1240px; margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* The page's light: one glow whose color follows the chapter. */
+.aura {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(50% 44% at 76% 30%, hsl(var(--hue) 85% 58% / 0.2), transparent 70%),
+    radial-gradient(42% 38% at 6% 94%, hsl(calc(var(--hue) + 70) 80% 55% / 0.1), transparent 70%);
+}
+
+/* ---------- Type ---------- */
+.kicker { font-size: 17px; font-weight: 600; letter-spacing: 0.01em; }
+.k-ai { background: var(--grad-ai); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.k-cyan { color: var(--v-d); }
+.k-green { color: var(--good); }
+.k-amber { color: var(--v-s); }
+.k-gloss { color: var(--gloss); }
+.h-xl { margin: 12px 0 0; font-size: clamp(40px, 4.6vw, 64px); line-height: 1.08; font-weight: 700; letter-spacing: -0.02em; }
+.h-l { margin: 10px 0 0; font-size: clamp(34px, 4.4vw, 58px); line-height: 1.1; font-weight: 700; letter-spacing: -0.015em; }
+.step .h-l { font-size: clamp(30px, 3.4vw, 46px); }
+.glow { background: linear-gradient(180deg, #fff 20%, hsl(var(--hue) 100% 80%) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.body { margin-top: 20px; max-width: 30em; font-size: clamp(17px, 1.35vw, 19px); line-height: 1.65; color: var(--text-2); }
+.body b { color: var(--text); font-weight: 600; }
+sup { font-size: 0.55em; line-height: 0; vertical-align: super; margin-left: 1px; }
+sup a { text-decoration: none; color: inherit; opacity: 0.7; }
+sup a:hover { opacity: 1; text-decoration: underline; }
+.kbd {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 1.9em; height: 1.9em; padding: 0 0.45em; border-radius: 0.42em;
+  font: 600 0.9em/1 var(--font); color: var(--text);
+  background: linear-gradient(#2c2c30, #1b1b1e);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 1px 0 rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.keys { display: inline-flex; gap: 6px; }
+
+/* ---------- Controls ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 46px; padding: 0 24px; border-radius: 980px;
+  font-size: 17px; font-weight: 500; text-decoration: none; white-space: nowrap;
+  background: var(--cta); color: #fff; transition: background-color 0.2s, transform 0.2s;
+}
+.btn:hover { background: #0077ed; }
+.btn:active { transform: scale(0.98); }
+.more { color: var(--link); text-decoration: none; white-space: nowrap; }
+.more::after { content: "\00a0›"; }
+.more:hover { text-decoration: underline; }
+.seg {
+  position: relative; display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  padding: 3px; border-radius: 980px; background: var(--raise-2); box-shadow: inset 0 0 0 1px var(--edge);
+}
+.seg button {
+  position: relative; z-index: 1; appearance: none; border: 0; background: transparent; cursor: pointer;
+  padding: 8px 18px; border-radius: 980px; font-size: 14px; font-weight: 500; color: var(--text-2); white-space: nowrap;
+  transition: color 0.3s;
+}
+.seg button[aria-pressed="true"] { color: #000; }
+.seg .thumb {
+  position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc((100% - 6px) / 2);
+  border-radius: 980px; background: var(--text);
+  transform: translateX(calc(100% * var(--i, 0))); transition: transform 0.5s var(--ease);
+}
+.chip {
+  appearance: none; border: 0; cursor: pointer;
+  padding: 9px 14px; border-radius: 980px; text-align: left;
+  font-size: 14px; font-weight: 500; line-height: 1.25; color: var(--text);
+  background: var(--raise-2); box-shadow: inset 0 0 0 1px var(--edge);
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+.chip:hover { background: rgba(255, 255, 255, 0.12); }
+.chip[aria-pressed="true"] { background: rgba(41, 151, 255, 0.18); box-shadow: inset 0 0 0 1px rgba(41, 151, 255, 0.7); }
+
+/* ---------- Nav ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(0, 0, 0, 0.66); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.nav .wrap { display: flex; align-items: center; gap: 26px; height: 52px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 16px; font-weight: 600; text-decoration: none; }
+.brand img { width: 24px; height: 24px; }
+.nav-links { display: flex; gap: 26px; margin-left: auto; font-size: 13px; }
+.nav-links a { color: rgba(245, 245, 247, 0.72); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover, .nav-links a.on { color: #fff; }
+.nav-cta { padding: 5px 13px; border-radius: 980px; background: var(--cta); color: #fff; font-size: 12.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+@media (max-width: 760px) {
+  .nav-links { display: none; }
+  .nav-cta { margin-left: auto; }
+}
+
+/* ---------- Story: text on the left, the MacBook on the right ---------- */
+.story-grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(32px, 4.5vw, 80px); }
+.stage-wrap {
+  grid-column: 2; grid-row: 1; align-self: start; position: sticky; top: 52px;
+  height: calc(100vh - 52px); display: flex; flex-direction: column; justify-content: center;
+}
+.steps { grid-column: 1; grid-row: 1; }
+.step { min-height: 88vh; display: flex; flex-direction: column; justify-content: center; padding-block: 10vh; transition: opacity 0.6s var(--ease); }
+.step.first { min-height: calc(100vh - 52px); padding-block: 4vh 8vh; }
+.step:last-child { min-height: 130vh; padding-bottom: 40vh; }
+.live .step:not(.on) { opacity: 0.3; }
+.step-stats { display: flex; flex-wrap: wrap; gap: 16px 32px; margin-top: 28px; }
+.stat b { display: block; font-size: clamp(28px, 2.6vw, 38px); line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.stat b small { font-size: 0.5em; font-weight: 600; letter-spacing: 0; margin-left: 3px; }
+.stat b .from { color: var(--text-3); font-weight: 600; }
+.stat > span { display: block; margin-top: 4px; font-size: 13px; color: var(--text-3); }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 26px; margin-top: 32px; }
+.meta { margin-top: 16px; font-size: 13px; color: var(--text-3); }
+.verdicts { display: grid; gap: 10px; margin-top: 26px; max-width: 30em; }
+.verdict { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 12px; align-items: start; padding: 14px 16px; border-radius: 16px; background: var(--raise); box-shadow: inset 0 0 0 1px var(--edge); font-size: 15px; line-height: 1.5; }
+.verdict svg { width: 22px; height: 22px; }
+.verdict.ok svg { color: var(--good); }
+.verdict.no svg { color: var(--bad); }
+.verdict small { display: block; color: var(--text-3); font-size: 13px; }
+.verdict del { color: var(--bad); text-decoration-thickness: 2px; }
+.verdict ins { text-decoration: none; color: var(--good); font-weight: 600; }
+.engine-pick { margin-top: 28px; }
+.ask-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; max-width: 32em; }
+.checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 22px; margin-top: 26px; max-width: 32em; font-size: 14px; color: var(--text-2); }
+.checks div { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; align-items: start; }
+.checks svg { width: 18px; height: 18px; margin-top: 2px; color: var(--good); }
+/* Listening practice: understood once, then again after 1, 3, 7 and 14 days; the fifth time it counts as known. */
+.stat-practice { flex: 0 1 290px; min-width: 0; }
+.ladder {
+  display: grid; grid-template-columns: auto repeat(4, minmax(0, 1fr) auto); align-items: center;
+  height: clamp(31px, 2.86vw, 42px); padding-top: 14px;
+}
+.ladder i { display: block; width: 11px; height: 11px; border-radius: 50%; background: var(--good); }
+.ladder i:last-child { width: 15px; height: 15px; box-shadow: 0 0 0 4px rgba(48, 209, 88, 0.22); }
+.ladder span { position: relative; height: 2px; margin-inline: 5px; border-radius: 2px; background: rgba(48, 209, 88, 0.35); }
+.ladder em { position: absolute; left: 50%; bottom: 7px; transform: translateX(-50%); font: 600 12px/1 var(--font); color: var(--text-2); white-space: nowrap; }
+
+/* Chapter strip under the MacBook: where you are in the story. */
+.chapters { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-top: 26px; }
+.chapters a { display: grid; gap: 8px; font-size: 12px; font-weight: 500; color: var(--text-3); text-decoration: none; transition: color 0.3s; }
+.chapters a:hover, .chapters a.on { color: var(--text); }
+.chapters i { display: block; height: 3px; border-radius: 3px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
+.chapters b { display: block; height: 100%; width: 100%; border-radius: 3px; background: var(--text); transform: scaleX(var(--f, 0)); transform-origin: left center; }
+
+@media (max-width: 960px) {
+  .story-grid { display: flex; flex-direction: column; }
+  .steps { display: contents; }
+  .step.first { order: -1; min-height: 0; padding-block: 28px 36px; }
+  .stage-wrap {
+    position: sticky; top: 52px; z-index: 5; height: auto; display: block; align-self: stretch;
+    padding: 10px 0 18px; background: linear-gradient(rgba(0, 0, 0, 0.94) 82%, rgba(0, 0, 0, 0));
+  }
+  .step { min-height: 80vh; justify-content: flex-start; padding-block: 24px 14vh; }
+  .step:last-child { min-height: 90vh; padding-bottom: 14vh; }
+  .chapters { gap: 6px; margin-top: 12px; }
+  .chapters span { display: none; }
+  .chapters i { height: 2px; }
+}
+
+/* ---------- The MacBook ---------- */
+.stage { container-type: inline-size; }
+.device {
+  position: relative; padding: 1.3cqw 1.3cqw 0;
+  border-radius: 3.4cqw 3.4cqw 0 0 / 4.8cqw 4.8cqw 0 0; background: #050506;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.13), 0 -30px 160px -50px hsl(var(--hue) 85% 60% / 0.7);
+}
+.base { height: 1.8cqw; margin: 0 -3.6cqw; border-radius: 0 0 2.4cqw 2.4cqw / 0 0 1.6cqw 1.6cqw; background: linear-gradient(#3a3a3f, #141416 70%); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6); }
+.base::before { content: ""; display: block; width: 14cqw; height: 0.7cqw; margin: 0 auto; border-radius: 0 0 1cqw 1cqw; background: #1a1a1d; }
+.screen {
+  --k: 1.15;
+  position: relative; aspect-ratio: 16 / 10.4; overflow: hidden; border-radius: 2cqw 2cqw 0 0;
+  background:
+    radial-gradient(52% 70% at 50% -6%, hsl(var(--hue) 95% 76% / 0.9), transparent 64%),
+    radial-gradient(38% 80% at 4% 72%, hsl(calc(var(--hue) - 40) 90% 52% / 0.6), transparent 72%),
+    radial-gradient(42% 85% at 97% 64%, hsl(calc(var(--hue) + 55) 85% 62% / 0.6), transparent 72%),
+    linear-gradient(180deg, hsl(var(--hue) 55% 26%) 0%, hsl(var(--hue) 60% 10%) 74%);
+}
+@container (max-width: 619px) {
+  .screen { --k: 1.85; aspect-ratio: 16 / 12.4; }
+  .mb-items, .mb-clock { display: none; }
+  .tl:nth-child(3) { display: none; }
+  .qa-src .src ~ .src, .qa-src .zh, .qa-foot { display: none; }
+}
+.menubar {
+  position: absolute; inset: 0 0 auto 0; display: flex; align-items: center; gap: 2cqw;
+  height: calc(var(--k) * 2.6cqw); padding: 0 1.8cqw;
+  font-size: calc(var(--k) * 1.1cqw); color: rgba(255, 255, 255, 0.9); background: rgba(8, 10, 32, 0.28);
+}
+.mb-items { display: flex; gap: 1.8cqw; }
+.mb-right { display: flex; align-items: center; gap: 1.4cqw; margin-left: auto; }
+.mb-right svg { width: calc(var(--k) * 1.4cqw); height: calc(var(--k) * 1.4cqw); display: block; }
+
+/* A video meeting behind the captions; whoever is speaking gets a green ring. */
+.meet {
+  position: absolute; left: 5cqw; right: 5cqw; top: calc(var(--k) * 3.6cqw); bottom: 2.6cqw; z-index: 0;
+  display: flex; flex-direction: column; justify-content: flex-end; gap: calc(var(--k) * 1.6cqw);
+  padding: 1.8cqw; border-radius: 1.4cqw; background: rgba(16, 16, 20, 0.78);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transition: opacity 0.6s, transform 0.8s var(--ease);
+}
+.stage[data-ch="3"] .meet, .stage[data-ch="4"] .meet, .stage[data-part="book"] .meet { opacity: 0; transform: scale(0.97); }
+.cams { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2cqw; }
+.cam {
+  --c: var(--v-d);
+  position: relative; aspect-ratio: 4 / 3; display: grid; place-items: center; border-radius: 1cqw; overflow: hidden;
+  background: radial-gradient(70% 60% at 50% 40%, color-mix(in srgb, var(--c) 22%, #1a1a20), #101014);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06); transition: box-shadow 0.35s;
+}
+.cam[data-v="s"] { --c: var(--v-s); }
+.cam[data-v="r"] { --c: var(--v-r); }
+.face { width: 7.5cqw; height: 7.5cqw; border-radius: 50%; display: grid; place-items: center; font-size: 3cqw; font-weight: 600; color: #fff; background: color-mix(in srgb, var(--c) 55%, #2a2a30); }
+.cam-name { position: absolute; left: 0.8cqw; bottom: 0.7cqw; padding: 0.2cqw 0.7cqw; border-radius: 0.5cqw; font-size: calc(var(--k) * 0.95cqw); background: rgba(0, 0, 0, 0.5); color: rgba(255, 255, 255, 0.9); }
+.stage[data-who="d"] .cam[data-v="d"], .stage[data-who="s"] .cam[data-v="s"], .stage[data-who="r"] .cam[data-v="r"] { box-shadow: inset 0 0 0 0.35cqw var(--good); }
+.meet-tools { display: flex; justify-content: center; gap: 1cqw; }
+.meet-tools i { display: block; width: calc(var(--k) * 2.4cqw); height: calc(var(--k) * 2.4cqw); border-radius: 50%; background: rgba(255, 255, 255, 0.12); }
+.meet-tools .leave { width: calc(var(--k) * 4.4cqw); border-radius: 980px; background: var(--bad); }
+
+/* The notch and the captions that grow out of it. */
+.island {
+  position: absolute; top: 0; left: 50%; z-index: 3; width: 25cqw; transform: translateX(-50%);
+  padding: 0 0.8cqw calc(var(--k) * 0.5cqw); background: #000; border-radius: 0 0 1.4cqw 1.4cqw;
+  transition: width 0.8s var(--ease), padding 0.8s var(--ease), border-radius 0.8s var(--ease);
+}
+.island.open { width: 88cqw; padding-bottom: calc(var(--k) * 1.3cqw); border-radius: 0 0 2.4cqw 2.4cqw; }
+.island::before, .island::after { content: ""; position: absolute; top: 0; width: 0.8cqw; height: 0.8cqw; }
+.island::before { left: -0.8cqw; background: radial-gradient(circle at 0 100%, transparent calc(0.8cqw - 0.5px), #000 0.8cqw); }
+.island::after { right: -0.8cqw; background: radial-gradient(circle at 100% 100%, transparent calc(0.8cqw - 0.5px), #000 0.8cqw); }
+.ears { display: flex; align-items: center; height: calc(var(--k) * 2.6cqw); padding: 0 1.2cqw; }
+.ears > div { flex: 1; display: flex; align-items: center; min-width: 0; transition: opacity 0.4s; }
+.ears .end { justify-content: flex-end; }
+.ears .notch { flex: 0 0 14cqw; }
+.island:not(.open) .ears > div { opacity: 0; }
+.bars { display: flex; align-items: center; gap: calc(var(--k) * 0.22cqw); height: calc(var(--k) * 1.3cqw); }
+.bars i { display: block; width: calc(var(--k) * 0.26cqw); height: calc(var(--k) * 0.34cqw); border-radius: 9px; background: var(--good); }
+.talking .bars i { animation: level 0.8s ease-in-out infinite; }
+.talking .bars i:nth-child(2) { animation-duration: 0.62s; animation-delay: -0.2s; }
+.talking .bars i:nth-child(3) { animation-duration: 0.9s; animation-delay: -0.45s; }
+.talking .bars i:nth-child(4) { animation-duration: 0.7s; animation-delay: -0.1s; }
+@keyframes level { 0%, 100% { height: calc(var(--k) * 0.34cqw); } 50% { height: calc(var(--k) * 1.25cqw); } }
+.tag { display: flex; align-items: center; gap: 0.5cqw; font-size: calc(var(--k) * 0.95cqw); font-weight: 600; line-height: 1; color: rgba(255, 255, 255, 0.8); white-space: nowrap; }
+.tag svg { width: calc(var(--k) * 0.95cqw); height: calc(var(--k) * 0.95cqw); color: var(--spark); }
+.lines { display: grid; gap: calc(var(--k) * 0.45cqw); max-height: 0; overflow: hidden; padding: 0 2cqw; opacity: 0; transition: max-height 0.8s var(--ease), padding 0.8s var(--ease), opacity 0.5s; }
+.island.open .lines { max-height: 40cqw; padding-top: calc(var(--k) * 0.3cqw); opacity: 1; }
+.tr, .or { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.tr { font-size: calc(var(--k) * 2.05cqw); line-height: 1.32; font-weight: 600; color: #fff; min-height: 1.32em; }
+.tr.preview { color: rgba(255, 255, 255, 0.8); }
+.tr.final { animation: settle 0.7s var(--ease); }
+@keyframes settle { from { opacity: 0.35; filter: blur(2px); } to { opacity: 1; filter: none; } }
+.or { font-size: calc(var(--k) * 1.6cqw); line-height: 1.36; color: rgba(255, 255, 255, 0.62); min-height: 1.36em; }
+.w-bad { color: #ffbcb6; border-radius: 3px; background: linear-gradient(transparent 58%, rgba(255, 69, 58, 0.55) 58%); }
+.w-good { color: #fff; border-radius: 3px; background: linear-gradient(transparent 58%, rgba(48, 209, 88, 0.6) 58%); }
+.w-bad.pulse { animation: pulse 0.9s ease-in-out infinite; }
+@keyframes pulse { 50% { background-color: rgba(255, 69, 58, 0.22); } }
+/* 「原文 + 生词注释」: the caption stays in English, with the words still being learned noted underneath. */
+.gl-en { color: rgba(255, 255, 255, 0.6); }
+.gl-zh { color: var(--gloss); }
+.gl-dot { color: rgba(255, 255, 255, 0.3); }
+.gl.new { animation: settle 0.7s var(--ease); }
+.callout {
+  position: absolute; left: 50%; top: calc(var(--k) * 15.6cqw); z-index: 2;
+  display: inline-flex; align-items: center; gap: 0.8cqw; padding: calc(var(--k) * 0.7cqw) 1.6cqw;
+  border-radius: 980px; background: rgba(0, 0, 0, 0.55); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  font-size: calc(var(--k) * 1.2cqw); font-weight: 600; white-space: nowrap;
+  opacity: 0; transform: translate(-50%, 1cqw); transition: opacity 0.4s, transform 0.5s var(--ease);
+}
+.callout.show { opacity: 1; transform: translate(-50%, 0); }
+.callout i { width: calc(var(--k) * 0.8cqw); height: calc(var(--k) * 0.8cqw); border-radius: 50%; background: var(--c, var(--good)); box-shadow: 0 0 10px var(--c, var(--good)); }
+
+/* The app window that rises once the meeting is over. */
+.win {
+  position: absolute; left: 4.5cqw; right: 4.5cqw; top: calc(var(--k) * 4.4cqw); bottom: 0; z-index: 1;
+  display: flex; flex-direction: column; overflow: hidden;
+  border-radius: 1.6cqw 1.6cqw 0 0; background: var(--window);
+  box-shadow: 0 -12px 60px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+  transform: translateY(104%); transition: transform 0.9s var(--ease);
+}
+.stage[data-ch="3"] .win, .stage[data-ch="4"] .win, .stage[data-part="book"] .win { transform: none; }
+.win-bar { display: flex; align-items: center; gap: 1.2cqw; padding: calc(var(--k) * 1cqw) 1.8cqw; border-bottom: 1px solid rgba(255, 255, 255, 0.07); font-size: calc(var(--k) * 1.25cqw); white-space: nowrap; }
+.lights { display: inline-flex; gap: 0.6cqw; }
+.lights i { width: calc(var(--k) * 0.9cqw); height: calc(var(--k) * 0.9cqw); border-radius: 50%; display: block; }
+.lights i:nth-child(1) { background: #ff5f57; }
+.lights i:nth-child(2) { background: #febc2e; }
+.lights i:nth-child(3) { background: #28c840; }
+.win-bar b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
+.win-bar small { margin-left: auto; font-size: calc(var(--k) * 1.05cqw); color: var(--text-3); transition: color 0.4s; }
+.win-bar small.done { color: var(--good); }
+.win-bar .for-book { display: none; }
+.stage[data-ch="5"] .win-bar .for-meeting { display: none; }
+.stage[data-ch="5"] .win-bar .for-book { display: inline-flex; }
+.bar-seg { margin-left: auto; gap: 0.2cqw; padding: 0.25cqw; border-radius: 980px; background: rgba(255, 255, 255, 0.07); }
+.bar-seg i { padding: calc(var(--k) * 0.2cqw) 1.1cqw; border-radius: 980px; font-style: normal; font-size: calc(var(--k) * 1.05cqw); color: var(--text-2); }
+.bar-seg i:first-child { background: rgba(255, 255, 255, 0.16); color: var(--text); }
+.bar-zh { padding: calc(var(--k) * 0.2cqw) 1cqw; border-radius: 980px; background: rgba(255, 255, 255, 0.07); }
+.win-body { position: relative; flex: 1; min-height: 0; }
+.view { position: absolute; inset: 0; display: grid; align-content: start; gap: calc(var(--k) * 1.1cqw); padding: calc(var(--k) * 1.4cqw) 2.2cqw; transition: opacity 0.5s, transform 0.6s var(--ease); }
+.view-qa, .view-book { opacity: 0; transform: translateX(5%); pointer-events: none; }
+.stage[data-ch="4"] .view-tx, .stage[data-ch="5"] .view-tx, .stage[data-ch="5"] .view-qa { opacity: 0; transform: translateX(-5%); pointer-events: none; }
+.stage[data-ch="4"] .view-qa, .stage[data-ch="5"] .view-book { opacity: 1; transform: none; pointer-events: auto; }
+
+/* The vocabulary book: entries on the left, the chosen one on the right with the sentence that said it. */
+.view-book { grid-template-columns: minmax(0, 0.4fr) minmax(0, 1fr); align-content: stretch; gap: 0; padding: 0; }
+.bk-list { display: grid; align-content: start; gap: calc(var(--k) * 0.25cqw); padding: calc(var(--k) * 0.9cqw) 0.9cqw; overflow: hidden; background: rgba(255, 255, 255, 0.03); border-right: 1px solid rgba(255, 255, 255, 0.07); }
+.bk-list p { display: grid; gap: 0.1cqw; padding: calc(var(--k) * 0.55cqw) 1.1cqw; border-radius: 0.8cqw; font-size: calc(var(--k) * 1.02cqw); line-height: 1.35; color: var(--text-3); }
+.bk-list b { font-size: calc(var(--k) * 1.3cqw); font-weight: 600; color: var(--text); }
+.bk-list .on { background: rgba(255, 255, 255, 0.09); }
+.bk-detail { display: grid; align-content: start; gap: calc(var(--k) * 0.85cqw); min-width: 0; padding: calc(var(--k) * 1.7cqw) 2.6cqw; }
+.bk-term { display: flex; align-items: baseline; gap: 1cqw; font-size: calc(var(--k) * 2.7cqw); line-height: 1.1; font-weight: 600; }
+.bk-term small { padding: 0.15cqw 0.8cqw; border-radius: 980px; font-size: calc(var(--k) * 0.95cqw); font-weight: 500; color: var(--text-2); background: rgba(255, 255, 255, 0.1); }
+.bk-heard { margin-top: calc(var(--k) * -0.45cqw); font-size: calc(var(--k) * 1.1cqw); color: var(--text-3); }
+.bk-def, .bk-zh { font-size: calc(var(--k) * 1.55cqw); line-height: 1.4; }
+.bk-link { color: var(--link); cursor: pointer; }
+.bk-zh .bk-link { font-size: 0.8em; }
+.bk-mean { color: var(--meaning); }
+.bk-zh:not(.shown) .bk-mean, .bk-zh.shown .bk-link { display: none; }
+.bk-zh.shown .bk-mean { animation: settle 0.6s var(--ease); }
+.bk-progress { display: flex; align-items: center; gap: 1.1cqw; font-size: calc(var(--k) * 1.05cqw); color: var(--text-3); }
+.bk-dots { display: inline-flex; gap: 0.45cqw; }
+.bk-dots i { width: calc(var(--k) * 0.62cqw); height: calc(var(--k) * 0.62cqw); border-radius: 50%; background: rgba(255, 255, 255, 0.22); }
+.bk-btn { padding: calc(var(--k) * 0.2cqw) 1cqw; border-radius: 0.6cqw; background: rgba(255, 255, 255, 0.1); color: var(--text); }
+.bk-src { display: grid; gap: calc(var(--k) * 0.8cqw); margin-top: calc(var(--k) * 0.3cqw); padding-top: calc(var(--k) * 1.1cqw); border-top: 1px solid rgba(255, 255, 255, 0.07); }
+.bk-src-title { font-size: calc(var(--k) * 1.2cqw); font-weight: 600; }
+.bk-line { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1.1cqw; align-items: start; }
+.play { width: calc(var(--k) * 2.1cqw); height: calc(var(--k) * 2.1cqw); border-radius: 50%; display: grid; place-items: center; background: var(--link); color: #fff; cursor: pointer; }
+.play svg { width: 50%; height: 50%; }
+.play .i-pause, .play.on .i-play { display: none; }
+.play.on .i-pause { display: block; }
+.bk-said { font-size: calc(var(--k) * 1.42cqw); line-height: 1.45; }
+.bk-said mark { background: none; color: var(--link); font-weight: 600; }
+.bk-said span, .bk-said mark { transition: color 0.25s; }
+.bk-said.playing span:not(.on) { color: var(--text-3); }
+.bk-said.playing mark:not(.on) { color: rgba(41, 151, 255, 0.5); }
+.bk-meta { margin-top: calc(var(--k) * 0.35cqw); font-size: calc(var(--k) * 1.02cqw); color: var(--text-3); }
+.bk-meta .bk-link { margin-left: 0.9cqw; }
+@container (max-width: 619px) {
+  .view-book { grid-template-columns: minmax(0, 1fr); }
+  .bk-list { display: none; }
+}
+.tl { display: grid; grid-template-columns: calc(var(--k) * 4.2cqw) minmax(0, 1fr); gap: 1.2cqw; font-size: calc(var(--k) * 1.4cqw); line-height: 1.45; }
+.tl time { font: 500 calc(var(--k) * 1.12cqw)/1.85 var(--mono); color: var(--text-3); }
+.tl-text { position: relative; display: grid; }
+.tl-before, .tl-after { grid-area: 1 / 1; display: grid; align-content: start; gap: 0.3cqw; }
+.tl-after { background: var(--window); clip-path: inset(0 calc(100% - var(--w, 0%)) 0 0); }
+.tl-text::after {
+  content: ""; position: absolute; top: -0.3cqw; bottom: -0.3cqw; left: var(--w, 0%); width: 2px; margin-left: -1px;
+  background: var(--good); box-shadow: 0 0 14px var(--good); opacity: var(--scan, 0);
+}
+.zh { color: var(--text-3); }
+.who { font-weight: 600; margin-right: 0.7cqw; }
+.v-d { color: var(--v-d); }
+.v-s { color: var(--v-s); }
+.v-r { color: var(--v-r); }
+.view-qa { display: flex; flex-direction: column; }
+.qa-q { font-size: calc(var(--k) * 1.5cqw); font-weight: 600; }
+.qa-src-title { font-size: calc(var(--k) * 1.05cqw); color: var(--text-3); }
+.qa-bottom { margin-top: auto; display: grid; gap: calc(var(--k) * 0.9cqw); }
+.qa-ask { display: flex; align-items: center; gap: 1cqw; padding: calc(var(--k) * 0.8cqw) 1cqw calc(var(--k) * 0.8cqw) 1.6cqw; border-radius: 1.2cqw; background: rgba(255, 255, 255, 0.06); box-shadow: inset 0 0 0 1px var(--edge); font-size: calc(var(--k) * 1.4cqw); }
+.qa-ask span:first-child { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.qa-ask .placeholder { color: var(--text-3); }
+.qa-ask .send { flex: none; width: calc(var(--k) * 2.3cqw); height: calc(var(--k) * 2.3cqw); border-radius: 50%; display: grid; place-items: center; background: var(--link); color: #fff; }
+.qa-ask .send svg { width: 55%; height: 55%; }
+.qa-state { display: flex; align-items: center; gap: 0.8cqw; font-size: calc(var(--k) * 1.2cqw); color: var(--text-2); }
+.spinner { width: calc(var(--k) * 1.2cqw); height: calc(var(--k) * 1.2cqw); border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.16); border-top-color: var(--text-2); animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.qa-a { font-size: calc(var(--k) * 1.55cqw); line-height: 1.65; }
+.claim { transition: opacity 0.45s, filter 0.45s; }
+.claim.pre { opacity: 0; filter: blur(4px); }
+.cite {
+  display: inline-block; cursor: pointer; margin: 0 0.3cqw; padding: 0.15cqw 0.6cqw; border-radius: 0.6cqw; vertical-align: 0.08em;
+  font: 600 calc(var(--k) * 1.1cqw)/1.3 var(--mono); color: var(--link); background: rgba(41, 151, 255, 0.15); transition: background-color 0.2s;
+}
+.cite:hover, .cite.on { background: rgba(41, 151, 255, 0.38); }
+.qa-none { color: var(--text-2); }
+.qa-src { display: grid; gap: calc(var(--k) * 0.6cqw); padding-top: calc(var(--k) * 0.9cqw); border-top: 1px solid rgba(255, 255, 255, 0.07); }
+.src { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1cqw; font-size: calc(var(--k) * 1.2cqw); line-height: 1.45; color: var(--text-2); }
+.src .zh { margin-top: 0.2cqw; }
+.src .cite { margin: 0; align-self: start; }
+.qa-foot { font-size: calc(var(--k) * 1.05cqw); color: var(--text-3); }
+.track { position: relative; height: calc(var(--k) * 1.9cqw); border-radius: 0.8cqw; background: rgba(255, 255, 255, 0.05); overflow: hidden; }
+.track i { position: absolute; top: 30%; bottom: 30%; border-radius: 2px; opacity: 0.85; transform-origin: left center; transition: transform 0.6s var(--ease) var(--d, 0s); }
+.playhead { position: absolute; top: 0; bottom: 0; left: var(--p, 0%); width: 2px; margin-left: -1px; background: #fff; box-shadow: 0 0 10px rgba(255, 255, 255, 0.9); transition: left 0.9s var(--ease); }
+
+/* ---------- Sections after the story ---------- */
+.section { padding-block: clamp(96px, 12vw, 160px); }
+.section-head { max-width: 860px; margin: 0 auto; text-align: center; }
+.bento { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; margin-top: 64px; }
+.tile {
+  position: relative; overflow: hidden; min-width: 0;
+  display: flex; flex-direction: column; gap: 12px;
+  padding: clamp(24px, 2.8vw, 38px); border-radius: 30px;
+  background: var(--raise); box-shadow: inset 0 0 0 1px var(--edge);
+}
+.tile::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+  background: radial-gradient(380px circle at var(--mx, 50%) var(--my, -30%), rgba(255, 255, 255, 0.09), transparent 62%);
+  opacity: 0; transition: opacity 0.35s;
+}
+.tile:hover::before { opacity: 1; }
+.tile > * { position: relative; }
+.span-4 { grid-column: span 4; }
+.span-2 { grid-column: span 2; }
+.t-label { font-size: 14px; font-weight: 600; color: var(--text-3); }
+.t-title { margin: 0; font-size: clamp(22px, 2vw, 28px); line-height: 1.22; font-weight: 700; letter-spacing: -0.01em; }
+.t-text { font-size: 15px; line-height: 1.6; color: var(--text-2); max-width: 34em; }
+.t-text b { color: var(--text); font-weight: 600; }
+.t-big { font-size: clamp(54px, 5.6vw, 80px); line-height: 1; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; background: linear-gradient(120deg, #64d2ff, hsl(var(--hue) 100% 78%)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.t-big small { font-size: 0.34em; font-weight: 600; letter-spacing: 0; margin-left: 4px; }
+.names { display: flex; flex-wrap: wrap; gap: 8px; }
+.name { display: inline-flex; align-items: center; gap: 8px; padding: 7px 13px 7px 10px; border-radius: 980px; background: var(--raise-2); font-size: 14px; font-weight: 500; }
+.name i { width: 9px; height: 9px; border-radius: 50%; display: block; }
+.tile .track { height: 34px; margin-top: auto; border-radius: 10px; }
+.tile .track i { top: 10px; bottom: 10px; }
+.rise.pre .track i { transform: scaleX(0); }
+.notes { display: grid; gap: 6px; margin-top: auto; padding: 14px 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.05); font-size: 14px; line-height: 1.5; color: var(--text-2); }
+.notes h4 { margin: 0; font-size: 13px; font-weight: 600; color: var(--text); }
+.notes ul { margin: 0; padding-left: 1.1em; display: grid; gap: 3px; }
+.formats { display: flex; flex-wrap: wrap; gap: 6px; }
+.formats span { font: 500 12px/1 var(--mono); padding: 6px 8px; border-radius: 7px; background: var(--raise-2); color: var(--text-2); }
+.job { margin-top: auto; display: grid; gap: 8px; font-size: 13px; color: var(--text-2); }
+.job-bar { height: 5px; border-radius: 5px; background: var(--raise-2); overflow: hidden; }
+.job-bar i { display: block; height: 100%; width: var(--j, 62%); border-radius: 5px; background: var(--cta); transition: width 0.8s linear; }
+.duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.duo .keys { font-size: 20px; }
+.duo .t-title { margin-top: 14px; }
+.duo .t-text { margin-top: 6px; }
+.composer { margin-top: auto; min-height: 4.6em; padding: 14px 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.05); box-shadow: inset 0 0 0 1px var(--edge); font-size: 16px; line-height: 1.5; }
+.composer-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 12px; color: var(--text-3); }
+.composer-head i { width: 8px; height: 8px; border-radius: 50%; background: var(--text-3); display: block; transition: background-color 0.2s; }
+.composer.live .composer-head i { background: var(--bad); box-shadow: 0 0 0 4px rgba(255, 69, 58, 0.18); }
+.caret { display: inline-block; width: 2px; height: 1.1em; margin-left: 1px; vertical-align: -0.18em; background: var(--link); animation: blink 1.05s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.shot { margin-top: auto; border-radius: 18px; overflow: hidden; background: linear-gradient(160deg, hsl(var(--hue) 45% 22%), #07080f); padding: 6% 6% 5%; }
+.shot img { display: block; width: 100%; filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.55)); }
+.mirror { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: auto; }
+.mirror figure { margin: 0; display: grid; gap: 8px; text-align: center; font-size: 12px; color: var(--text-3); }
+.mini { position: relative; aspect-ratio: 16 / 10.4; border-radius: 10px; overflow: hidden; background: linear-gradient(160deg, hsl(var(--hue) 50% 32%), #0a0b14); box-shadow: inset 0 0 0 1px var(--edge); }
+.mini-notch, .mini-cap { position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: #000; }
+.mini-notch { width: 26%; height: 9%; border-radius: 0 0 5px 5px; }
+.mini-cap { width: 84%; height: 30%; border-radius: 0 0 9px 9px; }
+.mini-cap::before, .mini-cap::after { content: ""; position: absolute; left: 9%; height: 13%; border-radius: 3px; }
+.mini-cap::before { top: 42%; right: 9%; background: rgba(255, 255, 255, 0.85); }
+.mini-cap::after { top: 68%; right: 32%; background: rgba(255, 255, 255, 0.4); }
+.mini.shared::after { content: ""; position: absolute; right: 7%; bottom: 9%; width: 8px; height: 8px; border-radius: 50%; background: var(--bad); box-shadow: 0 0 0 3px rgba(255, 69, 58, 0.25); }
+.press-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: auto; }
+.press {
+  appearance: none; border: 0; cursor: pointer; text-align: left;
+  display: grid; align-content: start; gap: 8px; padding: 14px; border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04); box-shadow: inset 0 0 0 1px var(--edge);
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+.press .keys { font-size: 16px; }
+.press .what { font-size: 13px; line-height: 1.45; color: var(--text-2); }
+.press .did { min-height: 2.6em; font-size: 12px; line-height: 1.3; font-weight: 600; color: var(--link); opacity: 0; transition: opacity 0.3s; }
+.press.hit { background: rgba(41, 151, 255, 0.12); box-shadow: inset 0 0 0 1px rgba(41, 151, 255, 0.55); }
+.press.hit .kbd { transform: translateY(2px); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08); }
+.press.hit .did { opacity: 1; }
+@media (max-width: 960px) {
+  .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .span-4 { grid-column: span 2; }
+  .span-2 { grid-column: span 1; }
+}
+@media (max-width: 640px) {
+  .bento { grid-template-columns: minmax(0, 1fr); }
+  .span-4, .span-2 { grid-column: auto; }
+  .duo { grid-template-columns: minmax(0, 1fr); }
+  .press-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Privacy: a statement that lights up as it is read, then the facts and the models. */
+.statement { margin: 14px auto 0; font-size: clamp(26px, 4.2vw, 56px); word-break: keep-all; line-height: 1.22; font-weight: 700; letter-spacing: -0.015em; text-align: center; }
+.statement .hl { color: var(--good); }
+.statement.lit span span, .statement.lit > span:not(.hl) { opacity: clamp(0.16, calc((var(--p, 0) * (var(--n) + 6) - var(--i)) / 6), 1); }
+.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 72px; }
+.fact { padding: 26px 28px; border-radius: 26px; background: var(--raise); box-shadow: inset 0 0 0 1px var(--edge); min-width: 0; }
+.fact svg { width: 28px; height: 28px; color: var(--good); }
+.fact h3 { margin: 12px 0 6px; font-size: 18px; font-weight: 600; }
+.fact p { font-size: 15px; line-height: 1.6; color: var(--text-2); }
+.models { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 40px; }
+.model { display: inline-flex; align-items: baseline; gap: 8px; padding: 9px 14px; border-radius: 980px; background: var(--raise); box-shadow: inset 0 0 0 1px var(--edge); font-size: 14px; font-weight: 600; }
+.model small { font: 500 12px/1 var(--mono); color: var(--text-3); }
+.models-note { margin-top: 14px; text-align: center; font-size: 13px; color: var(--text-3); }
+@media (max-width: 1100px) { .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .facts { grid-template-columns: minmax(0, 1fr); } }
+
+/* Pricing: the free version beside membership, the member card lit by the page glow. */
+.sub { margin: 18px auto 0; max-width: 34em; font-size: clamp(17px, 1.5vw, 21px); line-height: 1.55; color: var(--text-2); }
+.plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 1000px; margin: 64px auto 0; }
+.plan { display: flex; flex-direction: column; gap: 24px; padding: clamp(26px, 3vw, 40px); border-radius: 30px; min-width: 0; background: var(--raise); box-shadow: inset 0 0 0 1px var(--edge); }
+.plan.member { background: radial-gradient(90% 60% at 50% 0%, hsl(var(--hue) 60% 30% / 0.55), transparent 70%), var(--raise); }
+.plan-name { margin: 0; font-size: 21px; font-weight: 600; }
+.plan-prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 24px; }
+.plan-price b { display: block; font-size: clamp(36px, 3.6vw, 46px); line-height: 1; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.plan-price b small { font-size: 0.36em; font-weight: 600; letter-spacing: 0; margin-left: 4px; }
+.plan-price span { display: block; margin-top: 8px; font-size: 14px; line-height: 1.45; color: var(--text-2); }
+.plan-lead { margin-bottom: -10px; font-size: 14px; color: var(--text-3); }
+.plan-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 11px; font-size: 16px; line-height: 1.45; }
+.plan-list li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; align-items: start; }
+.plan-list svg { width: 18px; height: 18px; margin-top: 2px; color: var(--good); }
+.plans-note { max-width: 46em; margin: 26px auto 0; text-align: center; font-size: 13px; line-height: 1.7; color: var(--text-3); }
+.plans-note a { color: var(--link); text-decoration: none; }
+.plans-note a:hover { text-decoration: underline; }
+@media (max-width: 760px) { .plans { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 420px) { .plan-prices { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- FAQ and footer ---------- */
+.faq { max-width: 860px; margin: 56px auto 0; }
+.faq details { border-bottom: 1px solid var(--edge); }
+.faq summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  padding: 22px 2px; font-size: clamp(17px, 1.7vw, 20px); font-weight: 600;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: ""; flex: none; width: 10px; height: 10px; border-right: 2px solid var(--text-3); border-bottom: 2px solid var(--text-3);
+  transform: translateY(-3px) rotate(45deg); transition: transform 0.3s var(--ease);
+}
+.faq details[open] summary::after { transform: translateY(3px) rotate(-135deg); }
+.faq .answer { padding: 0 2px 24px; font-size: 16px; line-height: 1.7; color: var(--text-2); max-width: 44em; }
+.faq .answer b { color: var(--text); font-weight: 600; }
+.footer { padding-block: 30px 44px; border-top: 1px solid rgba(255, 255, 255, 0.07); font-size: 12px; line-height: 1.65; color: var(--text-3); }
+.footer ol { margin: 0 0 18px; padding-left: 1.4em; display: grid; gap: 8px; }
+.footer .fine { display: grid; gap: 10px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.07); }
+.fine-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+.legal { display: flex; flex-wrap: wrap; row-gap: 4px; }
+.legal a { padding: 0 10px; border-left: 1px solid rgba(255, 255, 255, 0.16); color: var(--text-2); text-decoration: none; }
+.legal a:first-child { padding-left: 0; border-left: 0; }
+.legal a:hover { color: var(--text); text-decoration: underline; }
+
+/* ---------- Motion ---------- */
+.rise { transition: transform 1s var(--ease), opacity 1s var(--ease); }
+.rise.pre { transform: translateY(36px); opacity: 0.001; }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .step.first > * { animation: enter 1s var(--ease) backwards; }
+  .step.first > :nth-child(2) { animation-delay: 0.08s; }
+  .step.first > :nth-child(3) { animation-delay: 0.16s; }
+  .step.first > :nth-child(4) { animation-delay: 0.24s; }
+  .step.first > :nth-child(5) { animation-delay: 0.32s; }
+  .step.first > :nth-child(6) { animation-delay: 0.4s; }
+  .stage { animation: enter 1.2s var(--ease) 0.1s backwards; }
+  .screen { animation: wake 1.6s ease-out 0.2s backwards; }
+}
+@keyframes enter { from { opacity: 0; transform: translateY(28px); } }
+@keyframes wake { from { filter: brightness(0.1) saturate(0.4); } }
+@media (prefers-reduced-motion: reduce) {
+  :root { transition: none; }
+  .rise, .rise.pre { transform: none; opacity: 1; transition: none; }
+  .rise.pre .track i { transform: none; }
+  .island, .lines, .ears > div, .win, .view, .claim, .callout, .step, .seg .thumb, .playhead, .job-bar i, .track i, .bk-said span, .bk-said mark { transition: none; }
+  .talking .bars i, .caret, .tr.final, .spinner, .w-bad.pulse, .gl.new, .bk-zh.shown .bk-mean { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="aura" aria-hidden="true"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.8c.55 5.2 3.25 7.9 8.45 8.45-5.2.55-7.9 3.25-8.45 8.45-.55-5.2-3.25-7.9-8.45-8.45C8.75 9.7 11.45 7 12 1.8z"/><path fill="currentColor" d="M19 15.2c.24 2.1 1.3 3.16 3.4 3.4-2.1.24-3.16 1.3-3.4 3.4-.24-2.1-1.3-3.16-3.4-3.4 2.1-.24 3.16-1.3 3.4-3.4z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.3 4.3L19 7.2"/></g></symbol>
+    <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M7.4 12.4l3 3 6.2-6.4" fill="none" stroke="#000" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-no" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M8.4 8.4l7.2 7.2M15.6 8.4l-7.2 7.2" fill="none" stroke="#000" stroke-width="2.1" stroke-linecap="round"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 2.8v5.6c0 4.3-2.9 7.7-7 9.6-4.1-1.9-7-5.3-7-9.6V5.8z"/><path d="M9.2 12.1l2 2 3.8-4"/></g></symbol>
+    <symbol id="i-chip" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2.4"/><path d="M9.5 3v3M14.5 3v3M9.5 18v3M14.5 18v3M3 9.5h3M3 14.5h3M18 9.5h3M18 14.5h3" stroke-linecap="round"/><path d="M9.5 9.5h5v5h-5z"/></g></symbol>
+    <symbol id="i-people" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="9" cy="8.2" r="3.2"/><path d="M3.4 19.4c.7-3.2 2.9-5.1 5.6-5.1s4.9 1.9 5.6 5.1"/><circle cx="16.8" cy="9.2" r="2.6"/><path d="M16 14.4c2.5.1 4.2 1.7 4.8 4.4"/></g></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3.5 6.5c0-.9.7-1.6 1.6-1.6h4.2l2 2.2h7.6c.9 0 1.6.7 1.6 1.6v8.8c0 .9-.7 1.6-1.6 1.6H5.1c-.9 0-1.6-.7-1.6-1.6z"/></g></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8.6 5.3v13.4c0 .8.9 1.3 1.6.8l10.3-6.7c.6-.4.6-1.2 0-1.6L10.2 4.5c-.7-.5-1.6 0-1.6.8z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="13.5" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5.5M6.5 10.5L12 5l5.5 5.5"/></g></symbol>
+    <symbol id="i-bubble" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 5.5h16v10.2H10.5L6 19.6v-3.9H4z"/><path d="M7.5 9.4h4M13.2 9.4h3.3M7.5 12.2h6.2" stroke-linecap="round"/></g></symbol>
+    <symbol id="i-wifi" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 9.4a12 12 0 0 1 17 0M6.6 12.6a7.6 7.6 0 0 1 10.8 0M9.6 15.8a3.4 3.4 0 0 1 4.8 0"/></g><circle cx="12" cy="18.8" r="1.4" fill="currentColor"/></symbol>
+    <symbol id="i-battery" viewBox="0 0 24 24"><rect x="2.5" y="7" width="17" height="10" rx="2.8" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="4.3" y="8.8" width="11" height="6.4" rx="1.4" fill="currentColor"/><path d="M21 10.3v3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  </defs>
+</svg>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="img/icon.png" alt="" width="24" height="24">Uptitle</a>
+    <div class="nav-links">
+      <a href="#correct" data-spy="story">功能演示</a>
+      <a href="#more" data-spy="more">更多功能</a>
+      <a href="#local" data-spy="local">隐私</a>
+      <a href="#pricing" data-spy="pricing">价格</a>
+      <a href="#faq" data-spy="faq">常见问题</a>
+    </div>
+    <a class="nav-cta" href="#pricing" data-download>下载</a>
+  </div>
+</nav>
+
+<main id="top">
+  <section class="wrap" id="story">
+    <div class="story-grid">
+      <div class="stage-wrap">
+        <div class="stage" id="stage" data-ch="0" data-who="s">
+          <p class="visually-hidden">演示：MacBook 刘海下方实时显示英文会议的中文译文和英文原文；往下滚动，依次演示 AI 纠错、两种识别引擎、会后重新识别、向这场会提问，以及词本和只显示英文、给生词注上中文的字幕。</p>
+          <div class="device" aria-hidden="true">
+            <div class="screen">
+              <div class="menubar">
+                <div class="mb-items"><b>会议</b><span>文件</span><span>编辑</span><span>显示</span><span>窗口</span></div>
+                <div class="mb-right"><svg><use href="#i-bubble"/></svg><svg><use href="#i-wifi"/></svg><svg><use href="#i-battery"/></svg><span class="mb-clock">10月20日 周二 10:00</span></div>
+              </div>
+              <div class="meet">
+                <div class="cams">
+                  <div class="cam" data-v="d"><span class="face">D</span><span class="cam-name">Daniel</span></div>
+                  <div class="cam" data-v="s"><span class="face">S</span><span class="cam-name">Samantha</span></div>
+                  <div class="cam" data-v="r"><span class="face">R</span><span class="cam-name">Rishi</span></div>
+                </div>
+                <div class="meet-tools"><i></i><i></i><i></i><i class="leave"></i></div>
+              </div>
+              <div class="island open" id="island">
+                <div class="ears">
+                  <div><div class="bars"><i></i><i></i><i></i><i></i></div></div>
+                  <div class="notch"></div>
+                  <div class="end"><div class="tag"><svg><use href="#i-spark"/></svg>EN→中</div></div>
+                </div>
+                <div class="lines">
+                  <p class="tr" id="tr">Kafka 集群迁移已于周二完成，消费者延迟已恢复至 2 秒以下。</p>
+                  <p class="or" id="or">The <span class="w-good">Kafka</span> cluster migration finished on Tuesday, and consumer lag is back under 2 seconds.</p>
+                </div>
+              </div>
+              <div class="callout" id="callout"><i></i><span id="callout-text"></span></div>
+              <div class="win">
+                <div class="win-bar"><span class="lights"><i></i><i></i><i></i></span><b class="for-meeting">支付平台周同步会议</b><small id="win-sub" class="for-meeting">实时字幕 · 苹果语音识别</small><span class="bar-seg for-book"><i>词本</i><i>听力练习</i></span><small class="bar-zh for-book">中文</small></div>
+                <div class="win-body">
+                  <div class="view view-tx">
+                    <div class="tl"><time>00:06</time><div class="tl-text">
+                      <div class="tl-before"><p>The <span class="w-bad">cough could</span> cluster migration finished on Tuesday, and consumer lag is back under 2 seconds.</p><p class="zh"><span class="w-bad">咳嗽的</span>集群迁移已于周二完成，消费者延迟已重新低于 2 秒。</p></div>
+                      <div class="tl-after"><p><span class="who v-s">Samantha</span>The <span class="w-good">Kafka</span> cluster migration finished on Tuesday, and consumer lag is back under two seconds.</p><p class="zh"><span class="w-good">Kafka</span> 集群迁移已于周二完成，消费者延迟已恢复至两秒以下。</p></div>
+                    </div></div>
+                    <div class="tl"><time>00:13</time><div class="tl-text">
+                      <div class="tl-before"><p>On my side, the <span class="w-bad">Cuban Eats</span> upgrade is blocked because the ingress controller still uses the old API version.</p><p class="zh">在我这边，<span class="w-bad">Cuban Eats</span> 升级受阻，因为入口控制器仍在使用旧版 API 版本。</p></div>
+                      <div class="tl-after"><p><span class="who v-r">Rishi</span>On my side, the <span class="w-good">Kubernetes</span> upgrade is blocked because the ingress controller still uses the old API version.</p><p class="zh">在我这边，<span class="w-good">Kubernetes</span> 升级被阻塞了，因为入口控制器仍在使用旧的 API 版本。</p></div>
+                    </div></div>
+                    <div class="tl"><time>00:35</time><div class="tl-text">
+                      <div class="tl-before"><p>Samantha, please own the <span class="w-bad">Rundle Cup date</span> and Rishi will finish the ingress <span class="w-bad">fixed</span> by Friday.</p><p class="zh">Samantha，请负责 <span class="w-bad">Rundle Cup 的日期</span>，Rishi 将在周五前完成 ingress 的修复。</p></div>
+                      <div class="tl-after"><p><span class="who v-d">Daniel</span>Agreed, Samantha. Please own the <span class="w-good">runbook update</span>, and Rishi will finish the ingress <span class="w-good">fix</span> by Friday.</p><p class="zh">好的，萨曼莎。请负责<span class="w-good">更新运行手册</span>，Rishi 将在周五前完成入口修复。</p></div>
+                    </div></div>
+                  </div>
+                  <div class="view view-qa" id="view-qa">
+                    <p class="qa-q" id="qa-q">运行手册谁负责更新？</p>
+                    <div class="qa-state" id="qa-state" hidden><span class="spinner"></span><span id="qa-state-text">正在找相关的原话…</span></div>
+                    <p class="qa-a" id="qa-a"><span class="claim">Samantha 负责更新运行手册<span class="cite" data-i="10">00:31</span>。</span><span class="claim">Daniel 同意并明确要求 Samantha 负责此项工作<span class="cite" data-i="11">00:35</span>。</span></p>
+                    <div class="qa-src" id="qa-src">
+                      <p class="qa-src-title">出处：2 句原话</p>
+                      <div class="src"><span class="cite" data-i="10">00:31</span><div><p><span class="who v-s">Samantha</span>We should also update the runbook before the next release.</p><p class="zh">我们还需要在下次发布前更新运行手册。</p></div></div>
+                      <div class="src"><span class="cite" data-i="11">00:35</span><div><p><span class="who v-d">Daniel</span>Agreed, Samantha.</p><p class="zh">好的，萨曼莎。</p></div></div>
+                    </div>
+                    <p class="qa-foot" id="qa-foot">Qwen3.5-4B 在本机回答，用时 1.3 秒</p>
+                    <div class="qa-bottom">
+                      <div class="track" id="qa-track"><span class="playhead" id="playhead" style="--p:53.2%"></span></div>
+                      <div class="qa-ask"><span id="qa-typed" class="placeholder">问会里说过的内容</span><span class="send"><svg><use href="#i-up"/></svg></span></div>
+                    </div>
+                  </div>
+                  <div class="view view-book">
+                    <div class="bk-list">
+                      <p><b>ingress controller</b>a network component</p>
+                      <p><b>on my side</b>in my part of the work</p>
+                      <p class="on"><b>own</b>be responsible for</p>
+                      <p><b>retention policy</b>rules for data keeping</p>
+                      <p><b>sounds good</b>I agree, that works for me</p>
+                      <p><b>staging database</b>a test database</p>
+                    </div>
+                    <div class="bk-detail">
+                      <p class="bk-term">own<small>词</small></p>
+                      <p class="bk-heard">在 1 场会议里听到 1 次</p>
+                      <p class="bk-def">be responsible for</p>
+                      <p class="bk-zh" id="bk-zh"><span class="bk-link">显示中文意思</span><span class="bk-mean">负责</span></p>
+                      <div class="bk-progress"><span class="bk-dots"><i></i><i></i><i></i><i></i><i></i></span>还没练过<span class="bk-btn">我已掌握</span></div>
+                      <div class="bk-src">
+                        <p class="bk-src-title">原声 · 1 句</p>
+                        <div class="bk-line"><span class="play" id="bk-play"><svg class="i-play"><use href="#i-play"/></svg><svg class="i-pause"><use href="#i-pause"/></svg></span><div><p class="bk-said" id="bk-said">Please <mark>own</mark> the runbook update, and Rishi will finish the ingress fix by Friday.</p><p class="bk-meta">Daniel · 支付平台周同步会议 · 00:37<span class="bk-link">看译文</span></p></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="base" aria-hidden="true"></div>
+        </div>
+        <nav class="chapters" aria-label="功能演示">
+          <a href="#correct" data-ch="1"><span>AI 纠错</span><i><b></b></i></a>
+          <a href="#recognize" data-ch="2"><span>实时识别</span><i><b></b></i></a>
+          <a href="#retranscribe" data-ch="3"><span>会后重新识别</span><i><b></b></i></a>
+          <a href="#ask" data-ch="4"><span>问这场会</span><i><b></b></i></a>
+          <a href="#vocab" data-ch="5"><span>词本</span><i><b></b></i></a>
+        </nav>
+      </div>
+
+      <div class="steps">
+        <article class="step first on">
+          <p class="kicker k-ai">Uptitle</p>
+          <h1 class="h-xl">听到的每句话，<br><span class="glow">都在刘海下。</span></h1>
+          <p class="body">开会、看视频、听讲座，字幕和译文实时出现在刘海下方。听错的词，AI 会改回来；会开完，它再认真听一遍；会上说过什么，直接问它。<b>语音识别和 AI 都在你的 Mac 上运行。</b></p>
+          <div class="step-stats">
+            <div class="stat"><b>0.2<small>秒</small></b><span>说到一半，先出预览译文</span></div>
+            <div class="stat"><b>1.4<small>秒</small></b><span>说完一句，换上准确译文<sup><a href="#fn1">1</a></sup></span></div>
+          </div>
+          <div class="actions">
+            <a class="btn" href="#pricing" data-download>下载</a>
+            <a class="more" href="#correct">往下滚，看它怎么工作</a>
+          </div>
+          <p class="meta">需要 macOS 26.4 或更高版本，以及搭载 Apple 芯片的 Mac</p>
+        </article>
+
+        <article class="step" id="correct">
+          <p class="kicker k-ai">AI 纠错</p>
+          <h2 class="h-l">听错的词，<br>它会改回来。</h2>
+          <p class="body">每句话识别完，AI 参考前几句和你的专有名词表，改正听错的词。<b>只采纳读音、拼写相近的修改</b>；想加词、改说法，或者换成读音不像的词，一律拦下，字幕保持原样。</p>
+          <div class="verdicts">
+            <div class="verdict ok"><svg aria-hidden="true"><use href="#i-ok"/></svg><div><del>Kofka</del> → <ins>Kafka</ins><small>读音相近，采纳。纠错 0.72 秒，最终译文 0.67 秒</small></div></div>
+            <div class="verdict no"><svg aria-hidden="true"><use href="#i-no"/></svg><div>Cuban Eats → <del>Kafka Eats</del><small>读音不像，拦下，字幕保持原样<sup><a href="#fn3">3</a></sup></small></div></div>
+          </div>
+        </article>
+
+        <article class="step" id="recognize">
+          <p class="kicker k-cyan">实时识别</p>
+          <h2 class="h-l">英语会议，<br>换一副懂行话的耳朵。</h2>
+          <p class="body">默认用苹果语音识别。说英语时可以换成 NVIDIA 开源的 Nemotron，它在神经网络引擎上运行，只占约 130 MB 内存。<b>同一句话，点一下对比。</b></p>
+          <div class="engine-pick">
+            <div class="seg" id="engine-seg" role="group" aria-label="选择识别引擎" style="--i:1">
+              <span class="thumb" aria-hidden="true"></span>
+              <button type="button" data-engine="apple" aria-pressed="false">苹果语音识别</button>
+              <button type="button" data-engine="nemotron" aria-pressed="true">Nemotron</button>
+            </div>
+          </div>
+          <div class="step-stats">
+            <div class="stat"><b><span class="from">40</span> → 68</b><span>90 处行话认对的数量<sup><a href="#fn4">4</a></sup></span></div>
+            <div class="stat"><b><span class="from">13.7%</span> → 10.8%</b><span>每 100 个词错几个<sup><a href="#fn4">4</a></sup></span></div>
+          </div>
+        </article>
+
+        <article class="step" id="retranscribe">
+          <p class="kicker k-green">会后重新识别</p>
+          <h2 class="h-l">会开完，<br>它再认真听一遍。</h2>
+          <p class="body">会一结束，Qwen3-ASR 在本机把录音从头再识别一遍，换上准确得多的逐字稿，再重新纠错、翻译、区分说话人、写笔记。<b>往下滚，看它一行行改过来。</b></p>
+          <div class="step-stats">
+            <div class="stat"><b><span class="from">13.7%</span> → 4.8%</b><span>5 场真实英文会议的错词<sup><a href="#fn4">4</a></sup></span></div>
+            <div class="stat"><b><span class="from">6.9%</span> → 1.2%</b><span>中文备忘的错词<sup><a href="#fn5">5</a></sup></span></div>
+            <div class="stat"><b>4.4<small>分钟</small></b><span>识别完 51 分钟的会<sup><a href="#fn1">1</a></sup></span></div>
+          </div>
+        </article>
+
+        <article class="step" id="ask">
+          <p class="kicker k-ai">问这场会</p>
+          <h2 class="h-l">想不起谁说过什么，<br>问它就行。</h2>
+          <p class="body">AI 只根据这场的逐字稿回答，每句后面标出原话的时间，点一下就从那里播放。<b>找不到依据，它就直说没找到。</b></p>
+          <div class="ask-chips" role="group" aria-label="示例问题">
+            <button type="button" class="chip" aria-pressed="true">运行手册谁负责更新？</button>
+            <button type="button" class="chip" aria-pressed="false">Kubernetes 升级卡在哪里？</button>
+            <button type="button" class="chip" aria-pressed="false">存储告警怎么处理？</button>
+            <button type="button" class="chip" aria-pressed="false">会上提到预算了吗？</button>
+          </div>
+          <div class="checks">
+            <div><svg aria-hidden="true"><use href="#i-check"/></svg>引用的原话必须存在</div>
+            <div><svg aria-hidden="true"><use href="#i-check"/></svg>人名和数字要对得上</div>
+            <div><svg aria-hidden="true"><use href="#i-check"/></svg>答非所问的不显示</div>
+            <div><svg aria-hidden="true"><use href="#i-check"/></svg>找不到就说没找到</div>
+          </div>
+        </article>
+
+        <article class="step" id="vocab">
+          <p class="kicker k-gloss">词本</p>
+          <h2 class="h-l">会上常说的英文，<br>慢慢就听懂了。</h2>
+          <p class="body">英文会议开完，会上的短语、术语和生词收进词本，说得越多排得越前。每条都配着会上的原句和录音，解释先用英文，中文点了才显示。<b>字幕也能只显示英文，没掌握的词下面注上中文。</b></p>
+          <div class="step-stats">
+            <div class="stat"><b>40<small>条</small></b><span>51 分钟的会，约 2 分钟整理完<sup><a href="#fn1">1</a></sup></span></div>
+            <div class="stat stat-practice">
+              <div class="ladder" role="img" aria-label="听懂一次后，隔 1 天、3 天、7 天、14 天各再练一次，连续听懂五次算掌握"><i></i><span><em>1 天</em></span><i></i><span><em>3 天</em></span><i></i><span><em>7 天</em></span><i></i><span><em>14 天</em></span><i></i></div>
+              <span>听力练习：听懂了隔几天再练，连续五次算掌握</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="more">
+    <div class="wrap">
+      <div class="section-head rise">
+        <p class="kicker k-amber">更多功能</p>
+        <h2 class="h-l">还有这些，<br>每个都用得上。</h2>
+      </div>
+      <div class="bento">
+        <article class="tile span-4 rise">
+          <span class="t-label">区分说话人</span>
+          <h3 class="t-title">谁说的，一眼就知道。</h3>
+          <p class="t-text">会后在本机分析录音，给每句话标上说话人。填上名字，逐字稿和导出马上用新名字。</p>
+          <div class="names" aria-hidden="true"><span class="name"><i style="background:var(--v-d)"></i>Daniel</span><span class="name"><i style="background:var(--v-s)"></i>Samantha</span><span class="name"><i style="background:var(--v-r)"></i>Rishi</span></div>
+          <div class="track" id="speaker-track" aria-hidden="true"></div>
+        </article>
+        <article class="tile span-2 rise">
+          <span class="t-label">会后笔记</span>
+          <h3 class="t-title">笔记已经写好。</h3>
+          <p class="t-text">摘要、要点、待办和待解决的问题。</p>
+          <div class="notes">
+            <h4>待办</h4>
+            <ul><li>Rishi 于周五前完成入口配置修复。</li><li>团队在下次发布前更新运行手册。</li><li>团队于今日添加 50GB 存储空间。</li></ul>
+          </div>
+        </article>
+        <article class="tile span-2 rise">
+          <span class="t-label">导入音频和视频</span>
+          <div class="t-big" data-count="30">30<small>秒</small></div>
+          <p class="t-text">处理完一段 1 分钟的会议视频，纠错、翻译、说话人和笔记一次出齐。<sup><a href="#fn1">1</a></sup></p>
+          <div class="formats" aria-hidden="true"><span>mp3</span><span>m4a</span><span>wav</span><span>mp4</span><span>mov</span></div>
+          <div class="job" aria-hidden="true"><span id="job-text">产品评审.mp4 · 正在纠错和翻译</span><div class="job-bar"><i id="job-bar"></i></div></div>
+        </article>
+        <article class="tile span-4 rise">
+          <span class="t-label">语音备忘与听写</span>
+          <div class="duo">
+            <div><span class="keys" aria-label="Control Option M"><span class="kbd">⌃</span><span class="kbd">⌥</span><span class="kbd">M</span></span><h3 class="t-title">语音备忘</h3><p class="t-text">想到什么，按一下说出来，再按一下结束。录音和文字一起存进历史记录。</p></div>
+            <div><span class="keys" aria-label="Control Option V"><span class="kbd">⌃</span><span class="kbd">⌥</span><span class="kbd">V</span></span><h3 class="t-title">听写</h3><p class="t-text">在任何能打字的地方，<b>按住说话，松开就打出来</b>。</p></div>
+          </div>
+          <div class="composer" id="composer" aria-hidden="true">
+            <div class="composer-head"><i></i><span id="composer-state">松开，已输入</span></div>
+            <span id="composer-text">Please send the updated runbook to the platform team before Friday.</span><span class="caret"></span>
+          </div>
+        </article>
+        <article class="tile span-4 rise">
+          <span class="t-label">大字幕窗口</span>
+          <h3 class="t-title">共享屏幕时，大家一起看。</h3>
+          <p class="t-text">能拖动、随意调大小的黑底大字窗口，字号随手调，可以一直浮在最前面。</p>
+          <div class="shot"><img src="img/caption-window.png" width="1520" height="600" loading="lazy" alt="大字幕窗口：大号中文译文配英文原文，最下面一行是正在说的句子"></div>
+        </article>
+        <article class="tile span-2 rise">
+          <span class="t-label">共享屏幕时隐藏</span>
+          <h3 class="t-title">别人看不到你的字幕。</h3>
+          <p class="t-text">打开后，共享屏幕时别人看不到刘海字幕，系统截图里也没有；大字幕窗口照常可见。有的录屏和会议软件仍能拍到，要稳妥就只共享某个窗口，或只共享没有刘海字幕的那块屏幕。</p>
+          <div class="mirror" aria-hidden="true">
+            <figure><div class="mini"><i class="mini-cap"></i></div><figcaption>你的屏幕</figcaption></figure>
+            <figure><div class="mini shared"><i class="mini-notch"></i></div><figcaption>共享出去的画面</figcaption></figure>
+          </div>
+        </article>
+        <article class="tile span-2 rise">
+          <span class="t-label">本机语音识别</span>
+          <div class="t-big" data-count="45">45<small>种</small></div>
+          <p class="t-text">语言和地区，中文、粤语、英语、日语、韩语都在里面；可以翻译成 25 种语言。<sup><a href="#fn2">2</a></sup></p>
+        </article>
+        <article class="tile span-4 rise">
+          <span class="t-label">快捷键 · 在这一页按下试试</span>
+          <div class="press-grid">
+            <button type="button" class="press" data-key="C"><span class="keys"><span class="kbd">⌃</span><span class="kbd">⌥</span><span class="kbd">C</span></span><span class="what">开始或停止字幕</span><span class="did">字幕开始了，刘海下方出现第一句</span></button>
+            <button type="button" class="press" data-key="N"><span class="keys"><span class="kbd">⌃</span><span class="kbd">⌥</span><span class="kbd">N</span></span><span class="what">打开或收起控制面板</span><span class="did">控制面板从刘海里展开</span></button>
+            <button type="button" class="press" data-key="M"><span class="keys"><span class="kbd">⌃</span><span class="kbd">⌥</span><span class="kbd">M</span></span><span class="what">开始或停止语音备忘</span><span class="did">开始录音，说完再按一下</span></button>
+            <button type="button" class="press" data-key="V"><span class="keys"><span class="kbd">⌃</span><span class="kbd">⌥</span><span class="kbd">V</span></span><span class="what">按住说话，松开打字</span><span class="did">正在听，松开就打出来</span></button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="local" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker k-green">隐私</p>
+        <h2 class="statement" id="statement">识别和 AI 都在你的 Mac 上，<br><span class="hl">录音不上传</span>。</h2>
+      </div>
+      <div class="facts">
+        <div class="fact rise"><svg aria-hidden="true"><use href="#i-shield"/></svg><h3>录音不出这台 Mac</h3><p>实时识别和会后重新识别都在本机，声音不上传；选本地模型时，纠错、翻译、笔记、问答和词本也在本机完成。</p></div>
+        <div class="fact rise"><svg aria-hidden="true"><use href="#i-people"/></svg><h3>不用会议机器人</h3><p>直接听 Mac 的声音，不加入会议，也不改会议设置。会议软件、浏览器、播放器都能用。</p></div>
+        <div class="fact rise"><svg aria-hidden="true"><use href="#i-chip"/></svg><h3>开源模型，本机运行</h3><p>第一次用到时下载，之后离线可用，用完自动释放内存。</p></div>
+        <div class="fact rise"><svg aria-hidden="true"><use href="#i-folder"/></svg><h3>数据在你手里</h3><p>录音、字幕和笔记都存在你的电脑上，删除记录时录音一起删除。选用 Claude 时只发送文字。</p></div>
+      </div>
+      <div class="models rise" aria-label="用到的模型">
+        <span class="model">Qwen3.5-4B <small>3 GB</small></span>
+        <span class="model">Hy-MT2-1.8B <small>1 GB</small></span>
+        <span class="model">Qwen3-ASR-1.7B <small>3.7 GB</small></span>
+        <span class="model">Nemotron 0.6B <small>630 MB</small></span>
+        <span class="model">Parakeet TDT 0.6B <small>610 MB</small></span>
+        <span class="model">pyannote · WeSpeaker <small>20 MB</small></span>
+        <span class="model">Apple 本机模型 <small>系统自带</small></span>
+        <span class="model">苹果翻译 <small>按语言下载</small></span>
+        <span class="model">Claude <small>云端 · 可选</small></span>
+      </div>
+      <p class="models-note">用到哪个下载哪个。开字幕时约占 4 GB 内存，会后重新识别约 5 GB，用完自动释放。</p>
+    </div>
+  </section>
+
+  <section class="section" id="pricing" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head rise">
+        <p class="kicker k-cyan">价格</p>
+        <h2 class="h-l">字幕和翻译，<br>一直免费。</h2>
+        <p class="sub">第一次安装，会员功能免费试用 14 天，不用填付款信息。</p>
+      </div>
+      <div class="plans">
+        <article class="plan rise">
+          <h3 class="plan-name">免费版</h3>
+          <div class="plan-prices">
+            <div class="plan-price"><b>0<small>美元</small></b><span>下载就能用</span></div>
+          </div>
+          <ul class="plan-list">
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>实时字幕</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>翻译</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>听写</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>语音备忘</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>大字幕窗口</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>历史记录和录音回放</li>
+          </ul>
+        </article>
+        <article class="plan member rise">
+          <h3 class="plan-name">会员</h3>
+          <div class="plan-prices">
+            <div class="plan-price"><b>29.99<small>美元</small></b><span>买断，含之后的更新</span></div>
+            <div class="plan-price"><b>13.99<small>美元/年</small></b><span>年度会员，随时取消</span></div>
+          </div>
+          <p class="plan-lead">免费版的全部功能，加上：</p>
+          <ul class="plan-list">
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>实时字幕的 AI 纠错</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>英语实时识别用 Nemotron</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>会后重新识别录音</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>区分说话人</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>AI 笔记</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>问这场会</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>词本、听力练习和生词注释</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>导入音频和视频</li>
+          </ul>
+        </article>
+      </div>
+      <p class="plans-note">一个许可证可以在 3 台 Mac 上使用。买断和年度会员的首次付款，14 天内可以<a href="refund.html">无理由退款</a>。选用 Claude 作引擎时，API 费用由 Anthropic 按用量另收。</p>
+    </div>
+  </section>
+
+  <section class="section" id="faq" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head rise"><h2 class="h-l">常见问题</h2></div>
+      <div class="faq">
+        <details>
+          <summary>能用在哪些会议和视频软件上？</summary>
+          <div class="answer">任何在 Mac 上发出声音的 App 都可以：会议软件、浏览器里的网页会议和视频、播放器、播客，也可以只听某一个 App。线下开会用麦克风；电脑声音和麦克风同时开时，电脑声音标为「对方」，麦克风标为「我」。</div>
+        </details>
+        <details>
+          <summary>问这场会，回答靠得住吗？</summary>
+          <div class="answer">AI 只根据这场的逐字稿回答，每句都标出原话的时间。App 会逐句检查：引用的原话必须存在，回答里的人名、产品名和数字要在那句或相邻一句里出现，答非所问的不显示；<b>找不到依据时直接说没找到</b>。本地小模型偶尔会把两句话的意思揉在一起，所以每句都附上出处，点一下就能听原话核对。</div>
+        </details>
+        <details>
+          <summary>词本里的词是怎么挑出来的？</summary>
+          <div class="answer">先找出会上用到的常见会议说法，比如 sounds good、on my side；再让 AI 挑出值得学的短语和词。每一条都要核对：<b>原话里确实说过</b>，不是人名或太基础的词，短语要是系统词典收录的说法或者由名词组成的术语。留下的再按会上说它的两三句原话写解释。本地小模型偶尔还是会选错词义，所以每条都附上原句和原声，以原话为准。</div>
+        </details>
+        <details>
+          <summary>没有刘海的 Mac 能用吗？</summary>
+          <div class="answer">能。没有刘海的屏幕上，字幕显示在屏幕顶部正中；也可以打开大字幕窗口。</div>
+        </details>
+        <details>
+          <summary>需要联网吗？</summary>
+          <div class="answer">第一次用到时要下载语音识别模型、翻译语言包和本地 AI 模型。之后识别、翻译、纠错、笔记、问答和词本都可以离线完成；只有选 Claude 作引擎时才需要联网。会员的许可证每周联网核验一次，断网最多照常用 30 天。</div>
+        </details>
+        <details>
+          <summary>支持哪些语言？</summary>
+          <div class="answer">本机语音识别支持 45 种语言和地区，包括普通话、粤语、英语、日语、韩语、法语、德语和西班牙语；可以翻译成 25 种语言，具体以 macOS 提供的为准。Nemotron 实时识别只用于英语；会后重新识别支持中文、英语、法语、德语、西班牙语、意大利语、葡萄牙语和俄语，其他语言保留实时识别的结果。词本只整理英文会议。</div>
+        </details>
+        <details>
+          <summary>对电脑有什么要求？</summary>
+          <div class="answer">macOS 26.4 或更高版本，搭载 Apple 芯片的 Mac。开字幕时两个本地模型约占 4 GB 内存，字幕结束后自动释放；会后重新识别约占 5 GB，识别完就释放，有字幕在进行时会先暂停。</div>
+        </details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <ol>
+      <li id="fn1">速度为实测：MacBook Pro（M5 芯片，16 GB 内存）。1 分钟的三人英文测试会议，纠错、翻译、笔记和问答用 Qwen3.5-4B，预览译文用 Hy-MT2-1.8B；51 分钟的英文会议录音用 Qwen3-ASR 重新识别约 4.4 分钟，连同纠错、翻译、区分说话人和笔记约 13 分钟，都在后台进行；同一场会用 Qwen3.5-4B 整理词本约 2 分钟，收进 40 条。速度因机型和内容而不同。</li>
+      <li id="fn2">语言数量来自 macOS 27 的本机语音识别和翻译，以系统实际提供的为准。</li>
+      <li id="fn3">演示和截图里的会议是用语音合成制作的三人英文测试会议；字幕、预览译文、纠错、最终译文、重新识别、问答、词本和生词注释都是 Uptitle 的实际输出。</li>
+      <li id="fn4">识别准确率来自 5 场真实英文技术会议：取 12 段、共 4,369 个词，逐词人工校对出参考稿，统计每 100 个词错几个；行话是其中 90 处专业词，比如 Kafka、Terraform、CVE、Jira。在会议室里用笔记本麦克风收的录音上，Nemotron 会漏掉离麦克风远的人小声说的话，整体错词和苹果语音识别持平，行话认对的仍更多（20 处里 15 处对 12 处）。</li>
+      <li id="fn5">中文备忘是语音合成的 43 秒普通话测试录音，7 句话里夹着 Redis、Jira 等英文术语，错词按逐字校对计算。</li>
+    </ol>
+    <div class="fine">
+      <p>Mac 和 macOS 是 Apple Inc. 的商标。Qwen、Hy-MT2、Nemotron、Parakeet、Claude 等名称归各自的所有者。</p>
+      <div class="fine-row">
+        <span>© 2026 Dario Chen</span>
+        <nav class="legal" aria-label="条款与隐私"><a href="privacy.html">隐私政策</a><a href="terms.html">用户协议</a><a href="refund.html">退款说明</a><a href="mailto:ydbdyds@gmail.com">ydbdyds@gmail.com</a></nav>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  // 发布安装包后，把下载地址填在这里；留空时下载按钮跳到「价格」。
+  const DOWNLOAD_URL = "";
+  if (DOWNLOAD_URL) document.querySelectorAll("[data-download]").forEach((a) => { a.href = DOWNLOAD_URL; });
+
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+  const $ = (id) => document.getElementById(id);
+
+  // ---------- The test meeting every demo comes from: start, end, speaker, words ----------
+  const LINES = [
+    [0.0, 1.5, "d", "Good morning, everyone."], [1.6, 4.7, "d", "Let's start the weekly sync for the payments platform."],
+    [5.6, 6.5, "s", "Thanks, Daniel."], [6.7, 12.3, "s", "The Kafka cluster migration finished on Tuesday, and consumer lag is back under two seconds."],
+    [13.1, 13.6, "r", "Great."], [13.9, 20.7, "r", "On my side, the Kubernetes upgrade is blocked because the ingress controller still uses the old API version."],
+    [21.5, 24.7, "r", "How long do you need to fix the ingress configuration?"], [25.5, 26.6, "r", "Probably two days."],
+    [26.8, 29.5, "r", "I will pair with the platform team on Thursday."], [30.4, 31.8, "s", "I can help with testing."],
+    [31.9, 34.9, "s", "We should also update the runbook before the next release."], [35.8, 37.4, "d", "Agreed, Samantha."],
+    [37.6, 42.0, "d", "Please own the runbook update, and Rishi will finish the ingress fix by Friday."], [42.9, 43.6, "r", "Sounds good."],
+    [43.9, 48.0, "r", "One more thing, the staging database is running out of disk space."], [48.9, 50.1, "s", "I saw that alert too."],
+    [50.3, 54.6, "s", "Let's add 50 gigabytes today and set up a retention policy next week."], [55.5, 56.2, "d", "Perfect."],
+    [56.3, 57.9, "d", "That's everything for today."], [58.3, 59.4, "d", "Thanks, everyone."],
+  ];
+  const NAMES = { d: "Daniel", s: "Samantha", r: "Rishi" };
+  const ZH = {
+    5: "在我这边，Kubernetes 升级被阻塞了，因为入口控制器仍在使用旧的 API 版本。",
+    7: "大概需要两天。",
+    10: "我们还需要在下次发布前更新运行手册。",
+    11: "好的，萨曼莎。",
+    15: "我也看到了那个警报。",
+    16: "我们今天增加 50GB 存储空间，并下周配置保留策略。",
+  };
+  const stamp = (t) => `00:${String(Math.floor(t)).padStart(2, "0")}`;
+  const drawTrack = (el) => {
+    LINES.forEach(([t, e, v]) => {
+      const seg = document.createElement("i");
+      seg.style.cssText = `left:${(t / 60) * 100}%;width:${Math.max(0.6, ((e - t) / 60) * 100)}%;background:var(--v-${v});--d:${(0.25 + (t / 60) * 1.1).toFixed(2)}s`;
+      el.prepend(seg);
+    });
+  };
+  drawTrack($("qa-track"));
+  drawTrack($("speaker-track"));
+
+  // ---------- Notch captions ----------
+  const stage = $("stage");
+  const island = $("island");
+  const tr = $("tr");
+  const or = $("or");
+  const callout = $("callout");
+  const setTr = (html, kind) => { tr.innerHTML = html; tr.className = "tr" + (kind ? " " + kind : ""); };
+  const setOr = (html) => { or.innerHTML = html; };
+  const showCallout = (text, color) => {
+    if (!text) { callout.classList.remove("show"); return; }
+    $("callout-text").textContent = text;
+    callout.style.setProperty("--c", color || "var(--good)");
+    callout.classList.add("show");
+  };
+  let chapter = 0;
+
+  // The opening replays a test run sentence by sentence, as the notch shows it.
+  const SENTENCES = [
+    { who: "d", text: "Let's start the weekly sync for the payments platform.", previews: { 5: "让我们开始每周同步吧", 8: "让我们开始每周的支付同步工作吧" }, final: "让我们开始支付平台的周同步会议。" },
+    { who: "s", text: "The Kofka cluster migration finished on Tuesday, and consumer lag is back under 2 seconds.", previews: { 4: "Kofka群迁徙现象", 7: "Kofka集群迁移于周二结束", 12: "Kofka集群迁移于周二结束，消费者滞后现象又出现了" }, fix: ["Kofka", "Kafka"], final: "Kafka 集群迁移已于周二完成，消费者延迟已恢复至 2 秒以下。" },
+    { who: "s", text: "We should also update the runbook before the next release.", previews: { 6: "我们也应更新 runbook", 9: "我们应在下一次之前更新 runbook。" }, final: "我们还应在下一次发布前更新 runbook。" },
+    { who: "s", text: "Let's add 50 gigabytes today and set up a retention policy next week.", previews: { 5: "今天我们就添加50千兆字节吧", 10: "今天我们添加50吉字节的数据，并设置保留策略" }, final: "我们今天增加 50GB 存储空间，下周设置保留策略。" },
+  ];
+  const marked = (text, fix, fixed) => {
+    if (!fix || !text.includes(fix[0])) return text;
+    return text.replace(fix[0], fixed ? `<span class="w-good">${fix[1]}</span>` : `<span class="w-bad">${fix[0]}</span>`);
+  };
+  const opening = () => { stage.dataset.who = "s"; setTr(SENTENCES[1].final, ""); setOr(marked(SENTENCES[1].text, SENTENCES[1].fix, true)); };
+  let replaying = false;
+  const replay = async () => {
+    if (replaying || still) return;
+    replaying = true;
+    const on = () => chapter === 0;
+    await wait(2600);
+    for (let round = 2; on(); round++) {
+      const s = SENTENCES[round % SENTENCES.length];
+      const words = s.text.split(" ");
+      stage.dataset.who = s.who;
+      setTr("", "");
+      setOr("");
+      island.classList.add("talking");
+      for (let n = 1; n <= words.length && on(); n++) {
+        while (document.hidden) await wait(300);
+        if (!on()) break;
+        setOr(words.slice(0, n).join(" ").replace(/[.,]$/, ""));
+        const preview = s.previews[n];
+        if (preview) setTimeout(() => { if (on()) setTr(preview, "preview"); }, 150);
+        await wait(250 + Math.random() * 150);
+      }
+      island.classList.remove("talking");
+      await wait(500);
+      if (!on()) break;
+      setOr(marked(s.text, s.fix, false));
+      if (s.fix) { await wait(720); if (!on()) break; setOr(marked(s.text, s.fix, true)); }
+      await wait(670);
+      if (!on()) break;
+      setTr(s.final, "final");
+      await wait(2800);
+    }
+    replaying = false;
+  };
+
+  // Chapter 1: the misheard word is caught and fixed as you scroll.
+  const KOFKA = SENTENCES[1].text;
+  let fixPhase = -1;
+  const correction = (p) => {
+    const phase = p < 0.3 ? 0 : p < 0.56 ? 1 : 2;
+    if (phase === fixPhase) return;
+    fixPhase = phase;
+    if (phase === 0) {
+      setOr(KOFKA);
+      setTr(SENTENCES[1].previews[12], "preview");
+      showCallout("");
+    } else if (phase === 1) {
+      setOr(KOFKA.replace("Kofka", '<span class="w-bad pulse">Kofka</span>'));
+      setTr(SENTENCES[1].previews[12], "preview");
+      showCallout("AI 在核对这个词…", "var(--bad)");
+    } else {
+      setOr(marked(KOFKA, SENTENCES[1].fix, true));
+      setTr(SENTENCES[1].final, "final");
+      showCallout("改成 Kafka · 纠错 0.72 秒", "var(--good)");
+    }
+  };
+
+  // Chapter 2: the same sentence through each engine.
+  const ENGINES = {
+    apple: {
+      or: 'On my side, the <span class="w-bad">Cuban Eats</span> upgrade is blocked because the ingress controller still uses the old API version.',
+      tr: '在我这边，<span class="w-bad">Cuban Eats</span> 升级受阻，因为入口控制器仍在使用旧版 API 版本。',
+      call: ["苹果语音识别：把 Kubernetes 听成了 Cuban Eats", "var(--bad)"],
+    },
+    nemotron: {
+      or: 'Great on my side the <span class="w-good">Kubernetes</span> upgrade is blocked because the ingress controller still uses the old API version',
+      tr: '好的，在我这边，<span class="w-good">Kubernetes</span> 升级被阻塞了，因为入口控制器仍在使用旧版 API 版本。',
+      call: ["Nemotron：认对了 Kubernetes", "var(--good)"],
+    },
+  };
+  const engineSeg = $("engine-seg");
+  const engineButtons = [...engineSeg.querySelectorAll("button")];
+  let engineShown = "";
+  let enginePicked = "";
+  const showEngine = (name) => {
+    if (name === engineShown) return;
+    engineShown = name;
+    const engine = ENGINES[name];
+    engineButtons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.engine === name)));
+    engineSeg.style.setProperty("--i", name === "apple" ? 0 : 1);
+    setOr(engine.or);
+    setTr(engine.tr, "final");
+    showCallout(...engine.call);
+    island.classList.add("talking");
+    clearTimeout(island.quiet);
+    island.quiet = setTimeout(() => island.classList.remove("talking"), 1200);
+  };
+  engineSeg.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-engine]");
+    if (!button) return;
+    enginePicked = button.dataset.engine;
+    if (chapter === 2) showEngine(enginePicked);
+    else $("recognize").scrollIntoView({ behavior: still ? "auto" : "smooth" });
+  });
+
+  // Chapter 3: each line of the live transcript is rewritten as you scroll.
+  const tlTexts = [...document.querySelectorAll(".tl-text")];
+  const winSub = $("win-sub");
+  const rewrite = (p) => {
+    const w = clamp((p - 0.12) / 0.62);
+    tlTexts.forEach((el, i) => {
+      const own = clamp(w * tlTexts.length - i);
+      el.style.setProperty("--w", `${(own * 100).toFixed(2)}%`);
+      el.style.setProperty("--scan", own > 0 && own < 1 ? 1 : 0);
+    });
+    const done = w >= 1;
+    if (winSub.classList.contains("done") !== done) {
+      winSub.textContent = done ? "Qwen3-ASR 转写 · 已区分说话人" : "实时字幕 · 苹果语音识别";
+      winSub.classList.toggle("done", done);
+    }
+  };
+
+  // Chapter 4: ask the meeting.
+  const ANSWERS = [
+    { secs: "1.3", claims: [["Samantha 负责更新运行手册。", [10]], ["Daniel 同意并明确要求 Samantha 负责此项工作。", [11]]] },
+    { secs: "1.4", claims: [["Kubernetes 升级因入口控制器仍使用旧 API 版本而受阻。", [5]], ["Rishi 预计需要两天来修复入口配置。", [7]]] },
+    { secs: "1.4", claims: [["存储告警由 Samantha 处理，她计划今天增加 50 吉字节的空间，并下周设置保留策略。", [15, 16]]] },
+    { secs: "1.8", claims: [] },
+  ];
+  const chips = [...document.querySelectorAll(".ask-chips .chip")];
+  const qaQ = $("qa-q");
+  const qaA = $("qa-a");
+  const qaTyped = $("qa-typed");
+  const qaSrc = $("qa-src");
+  const qaState = $("qa-state");
+  const qaFoot = $("qa-foot");
+  const playhead = $("playhead");
+  const cite = (i) => {
+    const el = document.createElement("span");
+    el.className = "cite";
+    el.dataset.i = i;
+    el.textContent = stamp(LINES[i][0]);
+    return el;
+  };
+  const point = (i) => {
+    playhead.style.setProperty("--p", `${(LINES[i][0] / 60) * 100}%`);
+    document.querySelectorAll("#view-qa .cite").forEach((el) => el.classList.toggle("on", Number(el.dataset.i) === i));
+  };
+  $("view-qa").addEventListener("click", (event) => {
+    const el = event.target.closest(".cite");
+    if (el) point(Number(el.dataset.i));
+  });
+  let asking = 0;
+  let asked = -1;
+  const ask = async (n) => {
+    const run = ++asking;
+    const live = () => run === asking;
+    asked = n;
+    const answer = ANSWERS[n];
+    const question = chips[n].textContent;
+    chips.forEach((c, k) => c.setAttribute("aria-pressed", String(k === n)));
+    qaA.replaceChildren();
+    qaSrc.replaceChildren();
+    qaSrc.hidden = true;
+    qaFoot.hidden = true;
+    qaQ.textContent = "";
+    if (!still) {
+      qaTyped.classList.remove("placeholder");
+      for (let k = 1; k <= question.length && live(); k++) { qaTyped.textContent = question.slice(0, k); await wait(42); }
+      if (!live()) return;
+      await wait(240);
+      if (!live()) return;
+    }
+    qaTyped.textContent = "问会里说过的内容";
+    qaTyped.classList.add("placeholder");
+    qaQ.textContent = question;
+    if (!still) {
+      qaState.hidden = false;
+      $("qa-state-text").textContent = "正在找相关的原话…";
+      await wait(600);
+      if (!live()) return;
+      $("qa-state-text").textContent = "正在回答…";
+      await wait(650);
+      if (!live()) return;
+      qaState.hidden = true;
+    }
+    qaFoot.textContent = `Qwen3.5-4B 在本机回答，用时 ${answer.secs} 秒`;
+    if (!answer.claims.length) {
+      const none = document.createElement("span");
+      none.className = "qa-none";
+      none.textContent = "逐字稿里没有找到相关的内容。";
+      qaA.append(none);
+      qaFoot.hidden = false;
+      return;
+    }
+    for (const [text, src] of answer.claims) {
+      const span = document.createElement("span");
+      span.className = "claim" + (still ? "" : " pre");
+      span.append(text.replace(/。$/, ""));
+      src.forEach((i) => span.append(cite(i)));
+      span.append("。");
+      qaA.append(span);
+      if (!still) { await wait(40); span.classList.remove("pre"); await wait(380); if (!live()) return; }
+    }
+    const used = [...new Set(answer.claims.flatMap(([, src]) => src))].sort((x, y) => x - y);
+    const title = document.createElement("p");
+    title.className = "qa-src-title";
+    title.textContent = `出处：${used.length} 句原话`;
+    qaSrc.append(title);
+    used.forEach((i) => {
+      const row = document.createElement("div");
+      row.className = "src";
+      const text = document.createElement("div");
+      const en = document.createElement("p");
+      const who = document.createElement("span");
+      who.className = `who v-${LINES[i][2]}`;
+      who.textContent = NAMES[LINES[i][2]];
+      en.append(who, LINES[i][3]);
+      const zh = document.createElement("p");
+      zh.className = "zh";
+      zh.textContent = ZH[i];
+      text.append(en, zh);
+      row.append(cite(i), text);
+      qaSrc.append(row);
+    });
+    qaSrc.hidden = false;
+    qaFoot.hidden = false;
+    point(used[0]);
+  };
+  chips.forEach((chip, n) => chip.addEventListener("click", () => {
+    if (chapter !== 4) $("ask").scrollIntoView({ behavior: still ? "auto" : "smooth" });
+    ask(n);
+  }));
+
+  // Chapter 5: the book plays the sentence that said the word, then the notch keeps the English and notes the
+  // words still being learned underneath.
+  const said = $("bk-said");
+  const sayWords = [];
+  [...said.childNodes].forEach((node) => {
+    if (node.nodeType !== Node.TEXT_NODE) { sayWords.push(node); return; }
+    const frag = document.createDocumentFragment();
+    node.textContent.split(/(\s+)/).forEach((piece) => {
+      if (!piece.trim()) { frag.append(piece); return; }
+      const word = document.createElement("span");
+      word.textContent = piece;
+      frag.append(word);
+      sayWords.push(word);
+    });
+    node.replaceWith(frag);
+  });
+  const playButton = $("bk-play");
+  const meaning = $("bk-zh");
+  let listening = 0;
+  const quiet = () => {
+    said.classList.remove("playing");
+    sayWords.forEach((w) => w.classList.remove("on"));
+    playButton.classList.remove("on");
+  };
+  const hush = () => { listening++; quiet(); };
+  const listen = async (thenMeaning) => {
+    const run = ++listening;
+    const live = () => run === listening;
+    quiet();
+    said.classList.add("playing");
+    playButton.classList.add("on");
+    const [start, end] = LINES[12];
+    for (const word of sayWords) {
+      word.classList.add("on");
+      await wait(((end - start) * 1000) / sayWords.length);
+      if (!live()) return;
+    }
+    await wait(350);
+    if (!live()) return;
+    quiet();
+    if (!thenMeaning) return;
+    await wait(500);
+    if (live()) meaning.classList.add("shown");
+  };
+  playButton.addEventListener("click", () => listen(false));
+  meaning.addEventListener("click", (event) => { if (event.target.closest(".bk-link")) meaning.classList.add("shown"); });
+
+  const GLOSSED = [
+    { who: "d", text: LINES[12][3], notes: [["own", "负责"]] },
+    { who: "r", text: LINES[13][3], notes: [["sounds good", "好的，没问题"]] },
+    { who: "r", text: LINES[14][3], notes: [["staging database", "测试数据库"]] },
+    { who: "s", text: LINES[16][3], notes: [["retention policy", "保留策略"]] },
+  ];
+  // A note shows once the last word of its term has been heard.
+  GLOSSED.forEach((s) => {
+    const words = s.text.split(" ").map((w) => w.toLowerCase().replace(/[^a-z']/g, ""));
+    s.at = s.notes.map(([term]) => words.indexOf(term.split(" ").pop()) + 1);
+  });
+  let part = "";
+  let noted = -1;
+  const showGloss = (s, n) => {
+    const words = s.text.split(" ");
+    setTr(n >= words.length ? s.text : words.slice(0, n).join(" ").replace(/[.,]$/, ""), "");
+    const shown = s.notes.filter((_, k) => s.at[k] <= n);
+    if (shown.length === noted) return;
+    const fresh = shown.length > Math.max(noted, 0);
+    noted = shown.length;
+    setOr(shown.map(([term, mean], k) => (k ? '<span class="gl-dot">&ensp;·&ensp;</span>' : "") +
+      `<span class="gl${fresh && k === shown.length - 1 ? " new" : ""}"><span class="gl-en">${term}</span> <span class="gl-zh">${mean}</span></span>`).join(""));
+  };
+  const glossFirst = () => {
+    const s = GLOSSED[0];
+    stage.dataset.who = s.who;
+    noted = -1;
+    showGloss(s, s.text.split(" ").length);
+  };
+  let glossing = false;
+  const glossReplay = async () => {
+    if (glossing || still) return;
+    glossing = true;
+    const on = () => chapter === 5 && part === "notes";
+    for (let round = 1; on(); round++) {
+      await wait(round === 1 ? 2600 : 2400);
+      if (!on()) break;
+      const s = GLOSSED[round % GLOSSED.length];
+      const words = s.text.split(" ");
+      stage.dataset.who = s.who;
+      noted = -1;
+      showGloss(s, 0);
+      island.classList.add("talking");
+      for (let n = 1; n <= words.length && on(); n++) {
+        while (document.hidden) await wait(300);
+        if (!on()) break;
+        showGloss(s, n);
+        await wait(260 + Math.random() * 140);
+      }
+      if (on()) island.classList.remove("talking");
+    }
+    glossing = false;
+  };
+  const vocab = (p) => {
+    const next = p < 0.35 ? "book" : "notes";
+    if (next === part) return;
+    part = next;
+    stage.dataset.part = part;
+    hush();
+    if (part === "book") {
+      island.classList.remove("open", "talking");
+      showCallout("");
+      stage.dataset.who = "";
+      meaning.classList.toggle("shown", still);
+      if (!still) setTimeout(() => { if (chapter === 5 && part === "book") listen(true); }, 900);
+    } else {
+      island.classList.add("open");
+      glossFirst();
+      showCallout("显示方式：原文 + 生词注释", "var(--gloss)");
+      glossReplay();
+    }
+  };
+
+  // ---------- Which chapter is being read ----------
+  const steps = [...document.querySelectorAll(".step")];
+  const stageWrap = document.querySelector(".stage-wrap");
+  const story = $("story");
+  story.classList.add("live");
+  const chapterLinks = [...document.querySelectorAll(".chapters a")];
+  const spyLinks = [...document.querySelectorAll(".nav-links a[data-spy]")];
+  const statement = $("statement");
+  const HUES = { 0: 232, 1: 286, 2: 196, 3: 150, 4: 318, 5: 18, more: 214, local: 150, pricing: 262, faq: 232 };
+  let hue = 232;
+  const readingLine = () => {
+    if (window.innerWidth <= 960) {
+      const bottom = Math.min(stageWrap.getBoundingClientRect().bottom, window.innerHeight);
+      return bottom + (window.innerHeight - bottom) * 0.3;
+    }
+    return window.innerHeight * 0.5;
+  };
+  const enter = (i) => {
+    chapter = i;
+    stage.dataset.ch = i;
+    stage.dataset.who = ["s", "s", "r", "", "", ""][i];
+    steps.forEach((s, k) => s.classList.toggle("on", k === i));
+    island.classList.toggle("open", i <= 2);
+    island.classList.remove("talking");
+    if (i !== 1 && i !== 2) showCallout("");
+    fixPhase = -1;
+    engineShown = "";
+    part = "";
+    delete stage.dataset.part;
+    hush();
+    if (i === 0) { opening(); replay(); }
+    if (i === 4) { rewrite(1); if (asked < 0) ask(0); }
+  };
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const vh = window.innerHeight;
+    const line = readingLine();
+    let i = 0;
+    let p = 0;
+    steps.forEach((s, k) => {
+      const box = s.getBoundingClientRect();
+      if (box.top <= line) { i = k; p = clamp((line - box.top) / box.height); }
+    });
+    if (i !== chapter) enter(i);
+    if (i === 1) correction(p);
+    if (i === 2) showEngine(enginePicked || (p < 0.5 ? "apple" : "nemotron"));
+    if (i === 3) rewrite(p);
+    if (i === 5) vocab(p);
+    chapterLinks.forEach((a) => {
+      const k = Number(a.dataset.ch);
+      a.querySelector("b").style.setProperty("--f", k < i ? 1 : k === i ? p.toFixed(3) : 0);
+      a.classList.toggle("on", k === i);
+    });
+
+    // Sections after the story: the nav link and the glow follow them.
+    let zone = story.getBoundingClientRect().bottom > vh * 0.5 ? "story" : "";
+    ["more", "local", "pricing", "faq"].forEach((id) => { if ($(id).getBoundingClientRect().top <= vh * 0.5) zone = id; });
+    spyLinks.forEach((a) => a.classList.toggle("on", a.dataset.spy === zone && (zone !== "story" || i > 0)));
+    const next = zone === "story" || !zone ? HUES[i] : HUES[zone];
+    if (next !== hue) { hue = next; document.documentElement.style.setProperty("--hue", hue); }
+
+    if (statement.classList.contains("lit")) {
+      const top = statement.getBoundingClientRect().top;
+      statement.style.setProperty("--p", clamp((vh * 0.88 - top) / (vh * 0.5)).toFixed(3));
+    }
+  };
+
+  // The statement lights up character by character as it is read.
+  if (!still) {
+    let n = 0;
+    const light = (node) => {
+      [...node.childNodes].forEach((child) => {
+        if (child.nodeType === Node.TEXT_NODE) {
+          const frag = document.createDocumentFragment();
+          [...child.textContent].forEach((ch) => {
+            const span = document.createElement("span");
+            span.textContent = ch;
+            span.style.setProperty("--i", n++);
+            frag.append(span);
+          });
+          child.replaceWith(frag);
+        } else {
+          light(child);
+        }
+      });
+    };
+    statement.setAttribute("aria-label", statement.textContent);
+    light(statement);
+    statement.style.setProperty("--n", n);
+    statement.classList.add("lit");
+  }
+
+  window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  window.addEventListener("resize", () => requestAnimationFrame(update));
+  update();
+
+  // On arrival the notch opens and the replay starts.
+  if (!still && chapter === 0) {
+    island.classList.remove("open");
+    setTimeout(() => { if (chapter <= 2) island.classList.add("open"); }, 1100);
+  }
+  if (chapter === 0) replay();
+
+  // ---------- Tiles: a soft light follows the pointer ----------
+  document.querySelectorAll(".tile").forEach((tile) => {
+    tile.addEventListener("pointermove", (event) => {
+      const box = tile.getBoundingClientRect();
+      tile.style.setProperty("--mx", `${event.clientX - box.left}px`);
+      tile.style.setProperty("--my", `${event.clientY - box.top}px`);
+    });
+  });
+
+  // ---------- Things below the fold rise into place and come alive when reached ----------
+  if (!still && "IntersectionObserver" in window) {
+    const countUp = (el) => {
+      const to = Number(el.dataset.count);
+      const unit = el.querySelector("small").outerHTML;
+      const started = performance.now();
+      const tick = (now) => {
+        const k = clamp((now - started) / 1000);
+        el.innerHTML = Math.round(to * (1 - Math.pow(1 - k, 3))) + unit;
+        if (k < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    const rise = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.remove("pre");
+        rise.unobserve(entry.target);
+        const count = entry.target.querySelector("[data-count]");
+        if (count) countUp(count);
+      });
+    }, { rootMargin: "0px 0px -8% 0px" });
+    document.querySelectorAll(".rise").forEach((el) => {
+      if (el.getBoundingClientRect().top > window.innerHeight) { el.classList.add("pre"); rise.observe(el); }
+    });
+
+    // Loops that run only while their tile is on screen.
+    const whileShown = (el, threshold, loop) => {
+      let shown = false;
+      let running = false;
+      new IntersectionObserver(([entry]) => {
+        shown = entry.isIntersecting;
+        if (!shown || running) return;
+        running = true;
+        loop(() => shown).then(() => { running = false; });
+      }, { threshold }).observe(el);
+    };
+
+    // The import tile works through its file.
+    const bar = $("job-bar");
+    const jobText = $("job-text");
+    whileShown(bar, 0.5, async (shown) => {
+      while (shown()) {
+        for (const [w, text] of [[6, "正在识别"], [34, "正在识别"], [58, "正在纠错和翻译"], [84, "正在区分说话人和写笔记"], [100, "已完成，用时 30 秒"]]) {
+          if (!shown()) return;
+          bar.style.setProperty("--j", `${w}%`);
+          jobText.textContent = `产品评审.mp4 · ${text}`;
+          await wait(w === 100 ? 2800 : 950);
+        }
+        bar.style.transition = "none";
+        bar.style.setProperty("--j", "0%");
+        await wait(60);
+        bar.style.transition = "";
+      }
+    });
+
+    // Dictation types the sentence as it is heard.
+    const composer = $("composer");
+    const composerText = $("composer-text");
+    const composerState = $("composer-state");
+    const dictated = composerText.textContent;
+    whileShown(composer, 0.4, async (shown) => {
+      await wait(1400);
+      while (shown()) {
+        composerText.textContent = "";
+        composer.classList.add("live");
+        composerState.textContent = "按住 ⌃⌥V，正在听…";
+        await wait(700);
+        const words = dictated.split(" ");
+        for (let n = 1; n <= words.length; n++) { composerText.textContent = words.slice(0, n).join(" "); await wait(230 + Math.random() * 120); }
+        composer.classList.remove("live");
+        composerState.textContent = "松开，已输入";
+        await wait(3200);
+      }
+    });
+  }
+
+  // ---------- Shortcuts you can press on this page ----------
+  const presses = new Map([...document.querySelectorAll(".press")].map((el) => [el.dataset.key, el]));
+  const hit = (key) => {
+    const el = presses.get(key);
+    if (!el) return;
+    el.classList.remove("hit");
+    void el.offsetWidth;
+    el.classList.add("hit");
+    clearTimeout(el.hitTimer);
+    el.hitTimer = setTimeout(() => el.classList.remove("hit"), 1600);
+  };
+  presses.forEach((el, key) => el.addEventListener("click", () => hit(key)));
+  document.addEventListener("keydown", (event) => {
+    if (!event.ctrlKey || !event.altKey) return;
+    const key = (event.code || "").replace("Key", "");
+    if (presses.has(key)) { event.preventDefault(); hit(key); }
+  });
+})();
+</script>
+</body>
+</html>
